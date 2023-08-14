@@ -2,12 +2,15 @@
   "name": "mern-microservice-practice",
   "version": "1.0.0",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "config": "^3.3.9",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongodb": "^5.7.0",
-    "mongoose": "^7.4.1"
+    "mongoose": "^7.4.3",
+    "validation": "^0.0.1"
   },
   "main": "index.js",
   "scripts": {
@@ -16,5 +19,8 @@
   "keywords": [],
   "author": " <Iris>",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }

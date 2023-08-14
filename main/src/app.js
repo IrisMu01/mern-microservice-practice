@@ -1,4 +1,5 @@
-const db = require('./dbConnection');
+require('dotenv').config();
+const connectDb = require('./connectDb');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -7,7 +8,7 @@ const port = 4000;
 
 app.use(cors());
 app.use(bodyParser.json());
-db.connect();
+connectDb();
 
 app.listen(port, function() {
     console.log(`Server is running on port ${port}`);
