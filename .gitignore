@@ -1,3 +1,4 @@
 main/node_modules
 /.idea
 main/src/.env
+/.env
