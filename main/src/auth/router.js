@@ -71,6 +71,12 @@ router.put('/verify', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
+    const session = req.session;
+    if (!session.userId) {
+        res.status(403).json({message: "Unauthorized"});
+        return;
+    }
+
     const user = await User.findById(new mongoose.Types.ObjectId(req.params.id)).then(user => user);
     if (_.isEmpty(user)) {
         res.status(400).json({message: "No user found"});
@@ -79,7 +85,7 @@ router.delete('/:id', async (req, res) => {
         res.status(400).json({message: `${user.lockedReason} user cannot be deleted`});
     }
     if (!authUtils.compare(req.body.password, user.password)) {
-        res.status(400).json({error: "Incorrect credentials"});
+        res.status(400).json({error: "Incorrect password to delete user"});
         return;
     }
     await User.deleteOne({_id: new mongoose.Types.ObjectId(req.params.id)})
@@ -90,6 +96,28 @@ router.delete('/:id', async (req, res) => {
                 error: error
             });
         });
+});
+
+router.post("/login", async (req, res) => {
+    if (!req.body.username || !req.body.password) {
+        res.status(403).json({ message: "Username or password cannot be empty" });
+        return;
+    }
+    const user = await User.findOne({username: req.body.username});
+    if (!user || !authUtils.compare(req.body.password, user.password)) {
+        res.status(403).json({ message: "Invalid credentials" });
+        return;
+    } else if (user.lockedReason) {
+        res.status(403).json({ message: user.lockedReason });
+        return;
+    }
+    req.session.userId = user.id;
+    res.status(200).json({ message: "You have logged in" });
+});
+
+router.get("/logout", async (req, res) => {
+    req.session.destroy();
+    res.status(204).send();
 });
 
 module.exports = router;
