@@ -1,8 +1,3 @@
-/*
-* login (can't log in with non-active or incorrect password)
-* change one's own password, must provide old password
-* (later: reset one's own password, must provide recorded email address and the proper reset link)
-* */
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -70,9 +65,10 @@ router.put('/verify', async (req, res) => {
         });
 });
 
+// todo rethink logic
+//  now anyone can delete users, and the case of deleting users with active session is not considered
 router.delete('/:id', async (req, res) => {
-    const session = req.session;
-    if (!session.userId) {
+    if (!req.session.userId) {
         res.status(403).json({message: "Unauthorized"});
         return;
     }
@@ -119,5 +115,34 @@ router.get("/logout", async (req, res) => {
     req.session.destroy();
     res.status(204).send();
 });
+
+router.put("/:id/change-password", async (req, res) => {
+    if (!req.session.userId) {
+        res.status(403).json({message: "Unauthorized"});
+        return;
+    }
+
+    const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId));
+    if (!user) {
+        res.status(500).json({message: `No user with id ${req.session.userId}`});
+        return;
+    } else if (!authUtils.compare(req.body.oldPassword, user.password)) {
+        res.status(400).json({message: "Incorrect old password"});
+    } else if (!req.body.newPassword) {
+        res.status(400).json({message: "New password not provided"});
+    }
+
+    User.findByIdAndUpdate(user._id, {password: authUtils.encrypt(req.body.newPassword)}).then(updatedUser => {
+            res.status(200).json({message: `User @${updatedUser.username}'s password has been changed`});
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: "Internal server error - failed to change user's password",
+                error: error
+            });
+        });
+});
+
+// todo: reset one's own password, must provide recorded email address and the proper reset link
 
 module.exports = router;
