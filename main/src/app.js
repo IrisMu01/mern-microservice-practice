@@ -20,8 +20,10 @@ app.use(sessions({
 }));
 app.use(cookieParser());
 
-const authRouter = require("./auth/router");
+const authRouter = require("./microservices/auth/router");
 app.use('/api/auth', authRouter);
+const logRouter = require("./microservices/log/router");
+app.use('/api/log', logRouter);
 
 app.listen(port, function() {
     console.log(`Server is running on port ${port}`);

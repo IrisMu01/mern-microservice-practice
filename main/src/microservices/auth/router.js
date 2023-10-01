@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const User = require('../models/User');
+const User = require('../../db-models/User');
 const authUtils = require('./authUtils');
 const _ = require('lodash');
 
