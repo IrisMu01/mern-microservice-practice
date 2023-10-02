@@ -5,10 +5,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
+const amqp = require('amqplib/callback_api');
 
 const app = express();
 const port = 4000;
 
+// ============== sessions =================
 app.use(cors());
 app.use(bodyParser.json());
 connectDb();
@@ -20,6 +22,7 @@ app.use(sessions({
 }));
 app.use(cookieParser());
 
+// ======== routers =========
 const authRouter = require("./microservices/auth/router");
 app.use('/api/auth', authRouter);
 const logRouter = require("./microservices/log/router");
