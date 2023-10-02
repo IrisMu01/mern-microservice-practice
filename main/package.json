@@ -2,6 +2,7 @@
   "name": "mern-microservice-practice",
   "version": "1.0.0",
   "dependencies": {
+    "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "config": "^3.3.9",
