@@ -13,7 +13,7 @@ const login = async (req, res) => {
         res.status(403).json({ message: "Invalid credentials" });
         return;
     } else if (user.lockedReason) {
-        res.status(403).json({ message: user.lockedReason });
+        res.status(403).json({ message: `User cannot login now - ${user.lockedReason}` });
         return;
     }
     req.session.userId = user.id;

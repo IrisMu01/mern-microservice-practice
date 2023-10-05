@@ -15,12 +15,10 @@ router.delete('/:id', authService.deleteUser); // separate into userService
 
 router.put("/:id/change-password", authService.changePassword); // separate into userService
 
-await appStarter.launch({
+appStarter.launch({
     name: "AuthService",
     port: 4000,
     manageSessions: true,
     requestMapping: "/api/auth",
     router: router
 });
-
-//module.exports = router;
