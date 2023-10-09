@@ -2,16 +2,15 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
+const RedisStore = require('connect-redis').default;
+const redis = require('redis');
 const mongoose = require('mongoose');
 const amqp = require('amqplib/callback_api');
 const _ = require('lodash');
 
 /**
  * TODO
- *  - split AuthService into AuthService and UserService; only AuthService will handle
- *    sessions
  *  - migrate logs router to LogService
  *  - connect AuthService, UserService, and LogService for user/error logs
  * */
@@ -35,28 +34,32 @@ const launch = async (params) => {
     
         const useDb = params.useDb || true;
         if (useDb) {
-            const db = {
-                url: process.env.DB_URL,
-                username: process.env.DB_USERNAME,
-                password: process.env.DB_PASSWORD
-            }
-            const uri = `mongodb+srv://${db.username}:${db.password}@${db.url}/?retryWrites=true&w=majority`;
+            const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?retryWrites=true&w=majority`;
             await mongoose.connect(uri, {useNewUrlParser: true});
             console.log("Connected to database");
             mongoose.set("returnOriginal", false);
             mongoose.set("debug", true);
         }
     
-        const manageSessions = params.manageSessions || false;
-        if (manageSessions) {
-            app.use(sessions({
-                secret: process.env.SESSION_SECRET,
-                saveUninitialized: true,
-                cookie: {maxAge: 1000*60*60*24}, // one day
-                resave: false
-            }));
-            app.use(cookieParser());
-        }
+        const redisClient = redis.createClient({
+            password: process.env.REDIS_PASSWORD,
+            socket: {
+                host: process.env.REDIS_HOST,
+                port: process.env.REDIS_HOST_PORT
+            }
+        });
+        await redisClient.connect();
+        const redisStore = new RedisStore({
+            client: redisClient,
+            prefix: "mern-microservice-practice:"
+        });
+        app.use(sessions({
+            store: redisStore,
+            secret: process.env.SESSION_SECRET,
+            saveUninitialized: false,
+            cookie: {maxAge: 1000*60*60*24}, // one day
+            resave: false
+        }));
     
         if (params.requestMapping && params.router) {
             app.use(params.requestMapping, params.router);
