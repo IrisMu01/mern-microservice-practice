@@ -4,7 +4,6 @@ const authUtils = require("../auth/authUtils");
 const mongoose = require("mongoose");
 
 // todo add support for sending emails containing verification code
-// todo before commit: switch out detection of sessions with
 const registerUser = async (req, res) => {
     const sourceUser = _.cloneDeep(req.body);
     if (!sourceUser.email) {

@@ -6,7 +6,6 @@ const sessions = require('express-session');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 const mongoose = require('mongoose');
-const amqp = require('amqplib/callback_api');
 const _ = require('lodash');
 
 /**
@@ -64,17 +63,6 @@ const launch = async (params) => {
         if (params.requestMapping && params.router) {
             app.use(params.requestMapping, params.router);
         }
-    
-        amqp.connect('amqp://localhost:5672', (error, connection) => {
-            if (error) throw error;
-            connection.createChannel((error2, channel) => {
-                if (error2) throw error2;
-                const queue = 'mern-microservice-practice';
-                channel.assertQueue(queue, {
-                    durable: false
-                });
-            });
-        });
     
         app.listen(params.port, function() {
             console.log(`Microservice ${params.name} is running on port ${params.port}`);

@@ -1,34 +1,57 @@
+/*
+* create user activity entry
+* create error entry
+* query entries based on time ranges and user
+* (later - create: cron job entries)
+* (later - query: pagination, more filters)
+* (later with cronJobService: clear logs >30 days old)
+* */
 const _ = require("lodash");
+const rabbitMQ = require("../../rabbitMQUtils");
 const mongoose = require("mongoose");
 const Log = require("../../db-models/Log");
+const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
 
-const create = (req, res) => {
-    const sourceLog = _.cloneDeep(req.body);
+let mqClient;
+const connectToRabbitMQ = async () => {
+    mqClient = await rabbitMQ.getMQClient();
+    await Promise.all([
+        mqClient.channel.assertExchange(exchange.name, "topic", exchange.options),
+        mqClient.channel.assertQueue(queues.logs.name, queues.logs.options),
+        mqClient.channel.bindQueue(queues.logs.name, exchange.name, keys.userLogs)
+    ]);
+    mqClient.channel.consume(queues.logs.name, (message) => {
+        createFromQueueMessage(message);
+    });
+};
+connectToRabbitMQ();
+
+const createFromQueueMessage = (message) => {
+    const sourceLog = JSON.parse(message.content.toString());
+    console.log(sourceLog);
     if (!sourceLog.message) {
-        res.status(400).json({message: "No log message provided"});
+        console.error("No log message provided - " + sourceLog);
+        mqClient.channel.nack(message, false, false);
         return;
     } else if (!sourceLog.logType) {
-        res.status(400).json({message: "No log type provided"});
+        console.error("No log type provided - " + sourceLog);
+        mqClient.channel.nack(message, false, false);
         return;
     }
     if (sourceLog.logType === "user") {
         if (!sourceLog.user) {
-            res.status(400).json({message: "No user associated with the log"});
+            console.error("No user associated with the log - " + sourceLog);
+            mqClient.channel.nack(message, false, false);
             return;
         }
     }
-    sourceLog.created = new Date();
-    sourceLog.user = new mongoose.Types.ObjectId(sourceLog.user);
     Log.create(sourceLog)
-        .then(log => {
-            res.json({
-                id: log._id
-            });
-        })
-        .catch(error => res.status(500).json({
-            message: "Internal server error - failed to create log entry",
-            error: error
-        }));
+        .then(log => mqClient.channel.ack(message))
+        .catch(error => {
+            console.error("Internal server error - failed to create log entry");
+            console.error(error);
+            mqClient.channel.nack(message, false, true)
+        });
 };
 
 const search = (req, res) => {
@@ -67,5 +90,4 @@ const search = (req, res) => {
         });
 };
 
-exports.create = create;
 exports.search = search;

@@ -1,6 +1,20 @@
 const _ = require("lodash");
 const authUtils = require("./authUtils");
 const User = require("../../db-models/User");
+const rabbitMQ = require("../../rabbitMQUtils");
+const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
+
+let mqClient;
+const connectToRabbitMQ = async () => {
+    mqClient = await rabbitMQ.getMQClient();
+    await Promise.all([
+        mqClient.channel.assertExchange(exchange.name, "topic", exchange.options),
+        mqClient.channel.assertQueue(queues.logs.name, queues.logs.options)
+    ]).then(() => {
+        console.log("AuthService - MQ exchanges and queues asserted");
+    });
+};
+connectToRabbitMQ();
 
 const login = async (req, res) => {
     if (!req.body.username || !req.body.password) {
@@ -16,6 +30,17 @@ const login = async (req, res) => {
         return;
     }
     req.session.userId = user.id;
+    
+    const sourceLog = {
+        logType: "user",
+        user: user.id,
+        created: new Date(),
+        message: `User @${user.username} has logged in`
+    };
+    mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)))
+        .then(thing => thing)
+        .catch(error => console.error(error));
+    
     res.status(200).json({ message: "You have logged in" });
 };
 
