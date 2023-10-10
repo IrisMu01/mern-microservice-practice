@@ -2,20 +2,7 @@ const _ = require("lodash");
 const User = require("../../db-models/User");
 const authUtils = require("../auth/authUtils");
 const mongoose = require("mongoose");
-const rabbitMQ = require("../../rabbitMQUtils");
-const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
-
-let mqClient;
-const connectToRabbitMQ = async () => {
-    mqClient = await rabbitMQ.getMQClient();
-    await Promise.all([
-        mqClient.channel.assertExchange(exchange.name, "topic", exchange.options),
-        mqClient.channel.assertQueue(queues.logs.name, queues.logs.options)
-    ]).then(() => {
-        console.log("UserService - MQ exchanges and queues asserted");
-    });
-};
-connectToRabbitMQ();
+const loggingUtils = require("../../loggingUtils");
 
 // todo add support for sending emails containing verification code
 const registerUser = async (req, res) => {
@@ -35,14 +22,7 @@ const registerUser = async (req, res) => {
     sourceUser.lockedReason = "Unverified";
     User.create(sourceUser)
         .then(user => {
-            const sourceLog = {
-                logType: "user",
-                user: user.id,
-                created: new Date(),
-                message: `User @${user.username} has been created`
-            };
-            mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
-            
+            loggingUtils.createUserLog(user.id, `User @${user.username} has been created`);
             res.json({
                 id: user._id,
                 message: `User @${user.username} registered successfully`,
@@ -79,13 +59,7 @@ const verifyUser = async (req, res) => {
         lockedReason: null
     }
     await User.findByIdAndUpdate(user._id, fieldsToUpdate).then(user => {
-            const sourceLog = {
-                logType: "user",
-                user: user.id,
-                created: new Date(),
-                message: `User @${user.username} has been verified`
-            };
-            mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
+            loggingUtils.createUserLog(user.id, `User @${user.username} has been verified`);
             res.status(200).json({message: `User @${user.username} has been verified`});
         })
         .catch(error => {
@@ -141,13 +115,7 @@ const deleteCurrentUser = async (req, res) => {
     }
     await User.deleteOne({_id: user.id})
         .then(result => {
-            const sourceLog = {
-                logType: "user",
-                user: user.id,
-                created: new Date(),
-                message: `User @${user.username} has deleted their account`
-            };
-            mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
+            loggingUtils.createUserLog(user.id, `User @${user.username} has deleted their account`);
             req.session.destroy();
             res.status(204).send();
         })
@@ -176,13 +144,7 @@ const changePassword = async (req, res) => {
     }
     
     User.findByIdAndUpdate(user._id, {password: authUtils.encrypt(req.body.newPassword)}).then(updatedUser => {
-            const sourceLog = {
-                logType: "user",
-                user: user.id,
-                created: new Date(),
-                message: `User @${user.username} has changed their password`
-            };
-            mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
+            loggingUtils.createUserLog(user.id, `User @${user.username} has changed their password`);
             res.status(200).json({message: `User @${updatedUser.username}'s password has been changed`});
         })
         .catch(error => {
