@@ -1,7 +1,4 @@
 /*
-* create user activity entry
-* create error entry
-* query entries based on time ranges and user
 * (later - create: cron job entries)
 * (later - query: pagination, more filters)
 * (later with cronJobService: clear logs >30 days old)
@@ -19,16 +16,18 @@ const connectToRabbitMQ = async () => {
         mqClient.channel.assertExchange(exchange.name, "topic", exchange.options),
         mqClient.channel.assertQueue(queues.logs.name, queues.logs.options),
         mqClient.channel.bindQueue(queues.logs.name, exchange.name, keys.userLogs)
-    ]);
+    ]).then(() => {
+        console.log("LogService - MQ exchanges and queues asserted")
+    });
     mqClient.channel.consume(queues.logs.name, (message) => {
         createFromQueueMessage(message);
     });
 };
 connectToRabbitMQ();
 
+// todo create util function for inserting activity logs
 const createFromQueueMessage = (message) => {
     const sourceLog = JSON.parse(message.content.toString());
-    console.log(sourceLog);
     if (!sourceLog.message) {
         console.error("No log message provided - " + sourceLog);
         mqClient.channel.nack(message, false, false);
