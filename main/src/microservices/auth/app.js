@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const appStarter = require('../../appStarter');
+const appStarter = require('../../common-utils/appStarter');
 const authService = require('./authService');
 
 router.post("/login", authService.login);

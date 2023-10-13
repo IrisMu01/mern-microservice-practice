@@ -4,7 +4,7 @@
 * (later with cronJobService: clear logs >30 days old)
 * */
 const _ = require("lodash");
-const rabbitMQ = require("../../rabbitMQUtils");
+const rabbitMQ = require("../../common-utils/rabbitMQUtils");
 const mongoose = require("mongoose");
 const Log = require("../../db-models/Log");
 const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
@@ -15,7 +15,7 @@ const connectToRabbitMQ = async () => {
     await Promise.all([
         mqClient.channel.assertExchange(exchange.name, "topic", exchange.options),
         mqClient.channel.assertQueue(queues.logs.name, queues.logs.options),
-        mqClient.channel.bindQueue(queues.logs.name, exchange.name, keys.userLogs)
+        mqClient.channel.bindQueue(queues.logs.name, exchange.name, keys.generalLogs)
     ]).then(() => {
         console.log("LogService - MQ exchanges and queues asserted")
     });

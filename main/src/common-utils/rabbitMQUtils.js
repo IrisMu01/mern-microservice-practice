@@ -29,6 +29,7 @@ const queues = {
 };
 
 const keys = {
+    generalLogs: "logs.#",
     userLogs: "logs.user",
     errorLogs: "logs.error"
 };
