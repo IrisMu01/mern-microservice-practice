@@ -1,0 +1,61 @@
+.App {
+  background-color: #eeeeee;
+  color: #363636;
+  min-height: 100vh;
+}
+
+$cell-icon-size: 40 * 1px;
+$grass-color: #629b54;
+
+.cell {
+  width: $cell-icon-size * 1.6;
+  height: $cell-icon-size * 1.6;
+  margin: 1.5px;
+  border-radius: $cell-icon-size * 0.1;
+  font-size: $cell-icon-size;
+  text-align: center;
+
+  &.cursed-grass {
+    background-color: #835a72;
+  }
+
+  &.dog {
+    background-color: $grass-color;
+    color: #ffffff;
+  }
+
+  &.farm {
+    background-color: $grass-color;
+    color: #efa860;
+  }
+
+  &.grass {
+    background-color: $grass-color;
+  }
+
+  &.house {
+    background-color: $grass-color;
+    color: #a24b16;
+  }
+
+  &.paw {
+    background-color: $grass-color;
+    color: #673800;
+  }
+
+  &.tree {
+    background-color: $grass-color;
+    color: #094900;
+  }
+
+  &.unknown {
+    background-color: #888;
+  }
+
+  &.water {
+    background-color: #44a8cb;
+    color: #437ead;
+  }
+}
+
+/* todo: responsive design */
