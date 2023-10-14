@@ -63,7 +63,7 @@ export const gameSlice = createSlice({
             },
             dogStatus: {
                 alive: true,
-                hunger: 0,
+                hunger: 10,
                 actionPoints: 3, // will be variable by hunger in the future
                 onBoat: false
             },
@@ -171,7 +171,8 @@ export const gameSlice = createSlice({
             
             // change player coordinate based on w-a-s-d
             // if not onBoat, cannot walk into water
-            // if onBoat, can walk onto land, then set onBoat to false
+            // if onBoat, and walking onto land: set onBoat to false
+            // if onBoat, and walking into water: change player/boat/dog coordinate, swap map boat/water cells
             
             // if map coordinate points to boat: set onBoat to true
         },
@@ -196,27 +197,80 @@ export const gameSlice = createSlice({
         interactWithWater: (state, action) => {
             // cannot interact if unexplored or no action points
             
-            // fish, build boat
+            // get action type and water coordinates from action.payload
+            
+            // fish: 70% 1 fish, 25% 2 fish, 5% garbage
+            
+            // buildBoat: if inventory wood >= 5, water coordinate becomes boat
+            
+            // if action successful, actionPoint -1
         },
         interactWithCrop: (state, action) => {
             // cannot interact if unexplored or no action points
             
-            // plant crop, harvest crop
+            // plantCrop:
+            // cannot plant crop if no seeds left in inventory
+            // cannot plant crop if not on normal grass/paw
+            // plant crop:
+            //      - modify map
+            //      - inventory seed -1
+            //      - plantEnergy resets to 0
+            
+            // harvestCrop:
+            // cannot harvest crop if no mature crop
+            // declare number from action payload: random integer between 0 and 2
+            // harvest crop:
+            //      - cell becomes grass
+            //      - seed +2 if number > 0, else +1
+            //      - crop +(5 + number), if water within 2-blocks radius then crop +(8 + number)
+            
+            // if action successful, actionPoint -1
         },
         interactWithHouse: (state, action) => {
             // cannot interact if unexplored or no action points
             
-            // make food, eat, sleep
+            // makeFood:
+            //      - inventory food +(sum of fish and crop)
+            //      - inventory fish resets to 0, crop resets to 0
+            //      - does not consume action points
+            
+            // eat:
+            //      - inventory food -1, human hunger status +30
+            //      - does not consume action points
+            
+            // sleep:
+            //      - sanity +25 at night, +15 during the day
+            //      - sets action points to 0
         },
         interactWithTree: (state, action) => {
             // cannot interact if unexplored or no action points
             
-            // plant tree, release tree energy, clean wilt
+            // plantTree:
+            //      - can only plant on normal grass/paw
+            //      - inventory sapling -1
+            //      - plantEnergy on cell resets to 0
+            
+            // releaseTreeEnergy:
+            // declare number from action payload: random integer between 3 and 8
+            //      - can only perform on grown trees
+            //      - inventory sapling +2, wood +1
+            //      - starting clockwise on top of the cell, if neighbour cell is cursed then change neighbour cell to grass
+            //      - overflowed healing restores sanity: +3 per over-heal
+            
+            // cleanWilt:
+            //      - can only perform on wilts
+            //      - cell becomes grass
+            
+            // consume 1 action point
         },
         interactWithDog: (state, action) => {
             // cannot interact if unexplored or no action points
             
-            // feed dog
+            // feedDog
+            //      - can only interact if is on the same cell as dog
+            //      - if dog not on team, feeding adds dog to the team: dog cell becomes grass, initializes dog coordinates
+            //      - inventory food -1, dog hunger +40
+            //      - does not consume action points
         }
     }
 });
