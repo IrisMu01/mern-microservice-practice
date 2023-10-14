@@ -1,13 +1,12 @@
 import {Terrain} from "./Terrain";
+import {Fog} from "./Fog";
 import {Player} from "./Player";
 
 export const GameContainer = () => {
     return (
-        <div className="w-100">
-            <div className="w-100 text-center">
-                Game container
-            </div>
+        <div className="game-container">
             <Terrain/>
+            <Fog/>
             <Player/>
         </div>
     )

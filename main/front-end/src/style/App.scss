@@ -1,7 +1,22 @@
 .App {
-  background-color: #eeeeee;
-  color: #363636;
+  background-color: #282828;
+  color: #eeeeee;
   min-height: 100vh;
+  padding-top: 50px;
+}
+
+.game-container {
+  position: relative;
+  width: 80%;
+  margin: 0 10%;
+  padding: 50px 0;
+}
+
+.terrain-layer, .player-layer, .fog-layer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  right: 0;
 }
 
 $cell-icon-size: 40 * 1px;
@@ -15,8 +30,11 @@ $grass-color: #629b54;
   font-size: $cell-icon-size;
   text-align: center;
 
+  /* ---- terrain ---- */
+
   &.cursed-grass {
     background-color: #835a72;
+    color: #262626;
   }
 
   &.dog {
@@ -43,6 +61,13 @@ $grass-color: #629b54;
     color: #673800;
   }
 
+  &.baby-tree {
+    background-color: $grass-color;
+    color: #126206;
+    font-size: $cell-icon-size * 0.6;
+    padding-top: $cell-icon-size * 0.33;
+  }
+
   &.tree {
     background-color: $grass-color;
     color: #094900;
@@ -50,11 +75,39 @@ $grass-color: #629b54;
 
   &.unknown {
     background-color: #888;
+    animation: blinker 3s linear infinite;
+    @keyframes blinker {
+      50% {
+        opacity: 0.9;
+      }
+    }
   }
 
-  &.water {
+  &.river {
     background-color: #44a8cb;
     color: #437ead;
+  }
+
+  &.wilt {
+    background-color: $grass-color;
+    color: #696462;
+  }
+
+  &.seedling {
+    background-color: $grass-color;
+    color: #117c00;
+  }
+
+  /* ---- player ---- */
+  &.player {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #303030;
+    animation: blinker 3s linear infinite;
+    @keyframes blinker {
+      50% {
+        opacity: 0.5;
+      }
+    }
   }
 }
 
