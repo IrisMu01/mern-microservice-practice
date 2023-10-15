@@ -1,26 +1,26 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const block = {
-    b: { className: "baby-tree", component: <FontAwesomeIcon icon={"tree"} />},
-    c: { className: "cursed-grass", component: <FontAwesomeIcon icon={"skull"}/> },
-    d: { className: "dog", component: <FontAwesomeIcon icon={"dog"}/> },
-    f: { className: "farm", component: <FontAwesomeIcon icon={"wheat-awn"}/> },
-    g: { className: "grass" },
-    h: { className: "house", component: <FontAwesomeIcon icon={"house"}/> },
-    p: { className: "paw", component: <FontAwesomeIcon icon={"paw"}/> },
-    r: { className: "river",  component: <FontAwesomeIcon icon={"water"}/> },
-    s: { className: "seedling", component: <FontAwesomeIcon icon={"seedling"}/> },
-    t: { className: "tree", component: <FontAwesomeIcon icon={"tree"}/> },
-    w: { className: "wilt", component: <FontAwesomeIcon icon={"plant-wilt"}/> }
+    bo: { className: "boat", component: <FontAwesomeIcon icon={"sailboat"}/> },
+    bt: { className: "baby-tree", component: <FontAwesomeIcon icon={"tree"} />},
+    cg: { className: "cursed-grass", component: <FontAwesomeIcon icon={"skull"}/> },
+    fa: { className: "farm", component: <FontAwesomeIcon icon={"wheat-awn"}/> },
+    gr: { className: "grass" },
+    ho: { className: "house", component: <FontAwesomeIcon icon={"house"}/> },
+    pa: { className: "paw", component: <FontAwesomeIcon icon={"paw"}/> },
+    ri: { className: "river",  component: <FontAwesomeIcon icon={"water"}/> },
+    se: { className: "seedling", component: <FontAwesomeIcon icon={"seedling"}/> },
+    tr: { className: "tree", component: <FontAwesomeIcon icon={"tree"}/> },
+    wi: { className: "wilt", component: <FontAwesomeIcon icon={"plant-wilt"}/> }
 };
 
 const mockMap = [
-    [block.c, block.c, block.c, block.c, block.r, block.d],
-    [block.c, block.t, block.t, block.g, block.r, block.g],
-    [block.c, block.g, block.f, block.f, block.r, block.r],
-    [block.t, block.g, block.s, block.h, block.r, block.r],
-    [block.c, block.b, block.g, block.r, block.r, block.w],
-    [block.r, block.c, block.r, block.r, block.c, block.p]
+    [block.cg, block.cg, block.cg, block.cg, block.ri, block.gr],
+    [block.cg, block.tr, block.tr, block.gr, block.ri, block.gr],
+    [block.cg, block.gr, block.fa, block.fa, block.ri, block.ri],
+    [block.tr, block.gr, block.se, block.ho, block.ri, block.ri],
+    [block.cg, block.bt, block.gr, block.ri, block.ri, block.wi],
+    [block.ri, block.cg, block.ri, block.ri, block.cg, block.pa]
 ];
 
 export const Terrain = () => {
