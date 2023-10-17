@@ -1,6 +1,15 @@
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
+    faBowlFood,
+    faBrain,
+    faChevronDown,
+    faChevronLeft,
+    faChevronRight,
+    faChevronUp,
+    faCubesStacked,
     faDog,
+    faDrumstickBite,
+    faFish,
     faHouse,
     faPaw,
     faPlantWilt,
@@ -15,7 +24,16 @@ import {
 
 export const loadIcons = () => {
     library.add(
+        faBowlFood,
+        faBrain,
+        faChevronDown,
+        faChevronLeft,
+        faChevronRight,
+        faChevronUp,
+        faCubesStacked,
         faDog,
+        faDrumstickBite,
+        faFish,
         faHouse,
         faPaw,
         faPlantWilt,

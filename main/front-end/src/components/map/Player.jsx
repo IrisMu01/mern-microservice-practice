@@ -7,7 +7,7 @@ export const Player = () => {
     const dogCoordinate = useSelector(state => state.game.player.dogCoordinate);
     const fogMap = useSelector(state => state.game.terrain.fogMap);
     
-    const PlayerOnCell = ({x, y}) => {
+    const PlayerLayerCell = ({x, y}) => {
         if (humanCoordinate.x === x && humanCoordinate.y === y) {
             return (
                 <div className="cell player" key={`player-${x}-${y}`}>
@@ -28,9 +28,9 @@ export const Player = () => {
     return (
         <div className="player-layer">
             {[...Array(dimension.x + 1)].map((i, y) => (
-                <div className="d-flex w-100 justify-content-center" key={`player-row-${y}`}>
+                <div className="map-row" key={`player-row-${y}`}>
                     {[...Array(dimension.y + 1)].map((j, x) => (
-                        <PlayerOnCell x={x} y={y}/>
+                        <PlayerLayerCell x={x} y={y}/>
                     ))}
                 </div>
             ))}

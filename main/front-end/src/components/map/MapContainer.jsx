@@ -2,9 +2,9 @@ import {Terrain} from "./Terrain";
 import {Fog} from "./Fog";
 import {Player} from "./Player";
 
-export const GameContainer = () => {
+export const MapContainer = () => {
     return (
-        <div className="game-container">
+        <div className="map-container">
             <Terrain/>
             <Fog/>
             <Player/>

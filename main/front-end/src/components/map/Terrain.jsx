@@ -21,7 +21,7 @@ export const Terrain = () => {
     return (
         <div className="terrain-layer">
             {terrain.map((row, y) => (
-                <div className="d-flex w-100 justify-content-center" key={`terrain-${y}`}>
+                <div className="map-row" key={`terrain-${y}`}>
                     {row.map((cellName, x) => (
                         <div className={`cell ${cell[cellName].className}`} key={`terrain-${x}-${y}`}>
                             {cell[cellName].component}

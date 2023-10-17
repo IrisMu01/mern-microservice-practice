@@ -6,7 +6,7 @@ export const Fog = () => {
     return (
         <div className="fog-layer">
             {fogMap.map((row, y) => (
-                <div className="d-flex w-100 justify-content-center" key={`fog-${y}`}>
+                <div className="map-row" key={`fog-${y}`}>
                     {row.map((isUnknown, x) => (
                         <div className={`cell${isUnknown ? " unknown" : ""}`} key={`fog-${x}-${y}`}>
                         </div>
