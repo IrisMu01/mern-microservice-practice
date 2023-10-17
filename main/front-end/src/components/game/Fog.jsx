@@ -1,16 +1,11 @@
-const unknowns = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0],
-    [1, 1, 0, 0, 0, 0]
-];
+import { useSelector } from "react-redux";
 
 export const Fog = () => {
+    const fogMap = useSelector(state => state.game.terrain.fogMap);
+    
     return (
         <div className="fog-layer">
-            {unknowns.map((row, y) => (
+            {fogMap.map((row, y) => (
                 <div className="d-flex w-100 justify-content-center" key={`fog-${y}`}>
                     {row.map((isUnknown, x) => (
                         <div className={`cell${isUnknown ? " unknown" : ""}`} key={`fog-${x}-${y}`}>

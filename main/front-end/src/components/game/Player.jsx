@@ -1,35 +1,35 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
-const mapWidth = 6;
-const mapHeight = 6;
-const playerCoordinate = { x: 3, y: 2 };
-const dogCoordinate = {x: 1, y: 6};
+import { useSelector } from "react-redux";
 
 export const Player = () => {
+    const dimension = useSelector(state => state.game.terrain.dimension);
+    const humanCoordinate = useSelector(state => state.game.player.humanCoordinate);
+    const dogCoordinate = useSelector(state => state.game.player.dogCoordinate);
+    const fogMap = useSelector(state => state.game.terrain.fogMap);
+    
     const PlayerOnCell = ({x, y}) => {
-        if (playerCoordinate.x === x && playerCoordinate.y === y) {
+        if (humanCoordinate.x === x && humanCoordinate.y === y) {
             return (
                 <div className="cell player" key={`player-${x}-${y}`}>
                     <FontAwesomeIcon icon={"user"}/>
                 </div>
             );
-        } else if (dogCoordinate.x === x && dogCoordinate.y === y) {
-            // todo do not render if dog is not on the team
+        } else if (dogCoordinate.x === x && dogCoordinate.y === y && fogMap[x][y]) {
             return (
                 <div className="cell dog" key={`player-${x}-${y}`}>
                     <FontAwesomeIcon icon={"dog"}/>
                 </div>
             );
         } else {
-            return (<div key={`player-${x}-${y}`}></div>);
+            return (<div className="cell" key={`player-${x}-${y}`}></div>);
         }
     }
     
     return (
         <div className="player-layer">
-            {[...Array(mapHeight)].map((i, y) => (
-                <div className="d-flex w-100 justify-content-center" key={`player-${y}`}>
-                    {[...Array(mapWidth)].map((j, x) => (
+            {[...Array(dimension.x + 1)].map((i, y) => (
+                <div className="d-flex w-100 justify-content-center" key={`player-row-${y}`}>
+                    {[...Array(dimension.y + 1)].map((j, x) => (
                         <PlayerOnCell x={x} y={y}/>
                     ))}
                 </div>

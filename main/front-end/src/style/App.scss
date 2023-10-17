@@ -37,11 +37,6 @@ $grass-color: #629b54;
     color: #262626;
   }
 
-  &.dog {
-    background-color: $grass-color;
-    color: #ffffff;
-  }
-
   &.farm {
     background-color: $grass-color;
     color: #efa860;
@@ -88,6 +83,11 @@ $grass-color: #629b54;
     color: #437ead;
   }
 
+  &.boat {
+    background-color: #44a8cb;
+    color: #a97856;
+  }
+
   &.wilt {
     background-color: $grass-color;
     color: #696462;
@@ -102,6 +102,17 @@ $grass-color: #629b54;
   &.player {
     background-color: rgba(255, 255, 255, 0.4);
     color: #303030;
+    animation: blinker 3s linear infinite;
+    @keyframes blinker {
+      50% {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &.dog {
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
     animation: blinker 3s linear infinite;
     @keyframes blinker {
       50% {

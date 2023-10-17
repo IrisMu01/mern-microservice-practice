@@ -1,19 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { mapValue } from "../../constants";
 import _ from "lodash";
-
-const mapValue = {
-    boat: "bo",
-    babyTree: "bt",
-    cursedGrass: "cg",
-    farm: "fa",
-    grass: "gr",
-    house: "ho",
-    paw: "pa",
-    river: "ri",
-    seedling: "se",
-    tree: "tr",
-    wilt: "wi"
-};
 
 const environmentSanityBonus = {};
 environmentSanityBonus[mapValue.cursedGrass] = -3;
@@ -59,10 +46,10 @@ const isHumanOnUnexploredCell = (state) => {
 }
 
 const mockMap = [
-    ["cg", "cg", "cg", "cg", "ri", "dg"],
+    ["cg", "cg", "cg", "cg", "ri", "gr"],
     ["cg", "tr", "tr", "gr", "ri", "gr"],
     ["cg", "gr", "fa", "fa", "ri", "ri"],
-    ["tr", "gr", "se", "ho", "ri", "ri"],
+    ["tr", "gr", "se", "ho", "bo", "ri"],
     ["cg", "bt", "gr", "ri", "ri", "wi"],
     ["ri", "cg", "ri", "ri", "cg", "pa"]
 ];
@@ -89,13 +76,14 @@ export const gameSlice = createSlice({
     name: "currentTerrain",
     initialState: {
         terrain: {
+            dimension: mapDimension,
             map: mockMap,
             fogMap: unknowns,
             plantEnergyMap: plantEnergyMap
         },
         player: {
             humanCoordinate: {x: 3, y: 3},
-            dogCoordinate: {x: 0, y: 5},
+            dogCoordinate: {x: 5, y: 0},
             round: 1, // 6 rounds per day
             trueRound: 1, // only increments
             humanStatus: {
@@ -182,6 +170,7 @@ export const gameSlice = createSlice({
                     sanityChange -= 25;
                 }
             }
+            state.player.humanStatus.sanity += sanityChange;
             
             // determine next round's available action amount for human & dog: should be variable in the future
             state.player.humanStatus.actionPoints = 7;
@@ -296,7 +285,7 @@ export const gameSlice = createSlice({
             // ============= do map scan ===============
     
             // declare variable lifeNum, a random number between 50 and 100
-            const lifeNum = action.payload.lifeNum, deathNum = action.payload.deathNum;
+            const lifeNum = action.payload.lifeNum;
             
             for (let i = 0; i < mapDimension.x; i++) {
                 for (let j = 0; j < mapDimension.y; j++) {
@@ -345,6 +334,8 @@ export const gameSlice = createSlice({
                 case "d":
                     targetCoordinate.x = Math.max(mapDimension.x, targetCoordinate.x + 1);
                     break;
+                default:
+                    return;
             }
             const targetCell = state.map.terrain[targetCoordinate.x][targetCoordinate.y];
             
@@ -393,6 +384,8 @@ export const gameSlice = createSlice({
                 case "d":
                     targetCoordinate.x = Math.max(mapDimension.x, targetCoordinate.x + 1);
                     break;
+                default:
+                    return;
             }
             const targetCell = state.map.terrain[targetCoordinate.x][targetCoordinate.y];
     
@@ -480,7 +473,8 @@ export const gameSlice = createSlice({
             if (![mapValue.paw, mapValue.grass].includes(getCurrentCell(state, currentX, currentY))) {
                 return;
             }
-            
+    
+            const actionType = action.payload;
             if (actionType === "plantCrop") {
                 // - cannot plant crop if no seeds left in inventory
                 if (state.player.inventory.seed < 1) {
@@ -658,3 +652,10 @@ export const gameSlice = createSlice({
         }
     }
 });
+
+export const {
+    forwardTime, reverseTime, movePlayer, moveDog, explore,
+    interactWithWater, interactWithGrass, interactWithCrop, interactWithHouse, interactWithTree, interactWithWilt, interactWithDog
+} = gameSlice.actions;
+
+export default gameSlice.reducer;
