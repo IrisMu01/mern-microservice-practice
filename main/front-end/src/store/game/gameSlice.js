@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mapValue } from "../../utils/constants";
+import { mapValue, humanAction, dogAction } from "../../utils/constants";
 import { getSurroundingCells, getDirectSurroundingCells } from "../../utils/utils";
 import { forwardTime } from "./reducers/forwardTime";
 import { reverseTime } from "./reducers/reverseTime";
 import { switchBetweenHumanAndDog, movePlayer, moveDog } from "./reducers/movements";
 import { explore, interactWithWater, interactWithGrass, interactWithCrop, interactWithHouse, interactWithTree, interactWithWilt, interactWithDog } from "./reducers/interactions";
+import { determineHumanActions, determineDogActions } from "./reducers/determineAvailableActions";
 import _ from "lodash";
 
 const environmentSanityBonus = {};
@@ -45,6 +46,15 @@ const unknowns = [
     [1, 0, 0, 0, 0, 0],
     [1, 1, 0, 0, 0, 0]
 ];
+
+const humanAvailableActions = {};
+_.forEach(humanAction, (value, key) => {
+    humanAvailableActions[value] = false;
+});
+const dogAvailableActions = {};
+_.forEach(dogAction, (value, key) => {
+    dogAvailableActions[value] = false;
+});
 
 export const gameSlice = createSlice({
     name: "currentTerrain",
@@ -100,16 +110,45 @@ export const gameSlice = createSlice({
                     dog: null
                 }
             ]
+        },
+        availableActions: {
+            human: humanAvailableActions,
+            dog: dogAvailableActions
         }
     },
     reducers: {
         // todo separate failing condition checks out of each function
-        forwardTime: forwardTime,
-        reverseTime: reverseTime,
-        switchBetweenHumanAndDog: switchBetweenHumanAndDog,
-        movePlayer: movePlayer,
-        moveDog: moveDog,
-        explore: explore,
+        forwardTime: (state, action) => {
+            forwardTime(state, action);
+            determineHumanActions(state);
+            determineDogActions(state);
+        },
+        reverseTime: (state, action) => {
+            reverseTime(state, action);
+            determineHumanActions(state);
+            determineDogActions(state);
+        },
+        switchBetweenHumanAndDog: (state, action) => {
+            switchBetweenHumanAndDog(state, action);
+        },
+        movePlayer: (state, action) => {
+            movePlayer(state, action);
+            determineHumanActions(state);
+        },
+        moveDog: (state, action) => {
+            moveDog(state, action);
+            determineDogActions(state);
+        },
+        explore: (state, action) => {
+            explore(state, action);
+            determineHumanActions(state);
+            determineDogActions(state);
+        },
+        dogExplore: (state, action) => {
+            // todo dog explore
+            determineHumanActions(state);
+            determineDogActions(state);
+        },
         interactWithWater: interactWithWater,
         interactWithGrass: interactWithGrass,
         interactWithCrop: interactWithCrop,

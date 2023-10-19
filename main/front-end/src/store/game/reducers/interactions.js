@@ -12,7 +12,9 @@ const getCurrentCell = (state, x, y) => {
 
 const isHumanOnUnexploredCell = (state) => {
     return state.map.fogMap[state.player.humanCoordinate.x][state.player.humanCoordinate.y];
-}
+};
+
+// todo separate each action from the larger interact function
 
 export const explore = (state, action) => {
     const surroundingCells = getSurroundingCells(state.terrain.map, state.terrain.dimension, state.player.humanCoordinate.x, state.player.humanCoordinate.y);

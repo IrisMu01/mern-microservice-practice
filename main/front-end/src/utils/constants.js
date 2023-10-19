@@ -11,3 +11,23 @@ export const mapValue = {
     tree: "tr",
     wilt: "wi"
 };
+
+export const humanAction = {
+    explore: "Explore",
+    feedDog: "Feed dog",
+    buildBoat: "Build boat",
+    fish: "Fish",
+    startFarm: "Start farmland",
+    plantTree: "Plant tree",
+    harvest: "Harvest",
+    makeFood: "Make food",
+    eat: "Eat",
+    rest: "Rest",
+    releaseTreeEnergy: "Release tree energy",
+    cleanWilt: "Clean up wilt"
+};
+
+export const dogAction = {
+    explore: "Explore",
+    cleanWilt: "Clean up wilt"
+};
