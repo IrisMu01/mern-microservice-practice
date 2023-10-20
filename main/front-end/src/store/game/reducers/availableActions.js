@@ -35,7 +35,8 @@ export const availableActions = {
         state.availableActions.human.makeFood = map[humanCoordinate.x][humanCoordinate.y] === mapValue.house
             && (state.player.inventory.crop + state.player.inventory.fish > 0) && actionPointsAvailable;
     
-        state.availableActions.human.eat = map[humanCoordinate.x][humanCoordinate.y] === mapValue.house;
+        state.availableActions.human.eat = map[humanCoordinate.x][humanCoordinate.y] === mapValue.house
+            && state.player.inventory.food > 0;
     
         state.availableActions.human.rest = map[humanCoordinate.x][humanCoordinate.y] === mapValue.house;
     
@@ -56,12 +57,11 @@ export const availableActions = {
     
         const map = state.terrain.map;
         const fogMap = state.terrain.fogMap;
-        const mapDimension = state.terrain.dimension;
         const humanCoordinate = state.player.humanCoordinate;
         const dogCoordinate = state.player.dogCoordinate;
         const actionPointsAvailable = state.player.dogStatus.actionPoints;
     
-        const surroundingCells = getSurroundingCells(map, mapDimension, dogCoordinate.x, dogCoordinate.y);
+        const surroundingCells = gameUtils.getSurroundingCellsForDog(state);
         const explorable = _.filter(surroundingCells, cell => fogMap[cell.x][cell.y]);
         state.availableActions.dog.explore = (fogMap[dogCoordinate.x][dogCoordinate.y] || explorable.length > 0)
             && actionPointsAvailable;

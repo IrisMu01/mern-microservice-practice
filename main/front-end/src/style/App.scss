@@ -168,9 +168,14 @@ $grass-color: #629b54;
     }
   }
 
-  &.river {
+  &.water {
     background-color: #44a8cb;
     color: #437ead;
+  }
+
+  &.water-deep {
+    background-color: #236279;
+    color: #4179a2;
   }
 
   &.boat {

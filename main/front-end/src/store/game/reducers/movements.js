@@ -12,6 +12,8 @@ export const movements = {
     moveHuman: (state, direction) => {
         const startingCoordinate = _.cloneDeep(state.player.humanCoordinate);
         const targetCoordinate = {x: startingCoordinate.x, y: startingCoordinate.y};
+        const mapDimension = state.terrain.dimension;
+        
         switch (direction) {
             case "w":
                 targetCoordinate.y = Math.max(mapDimension.y, targetCoordinate.y + 1);
@@ -61,6 +63,8 @@ export const movements = {
         // declare variable based on action.payload
         const startingCoordinate = _.cloneDeep(state.player.dogCoordinate);
         const targetCoordinate = {x: startingCoordinate.x, y: startingCoordinate.y};
+        const mapDimension = state.terrain.dimension;
+        
         switch (direction) {
             case "w":
                 targetCoordinate.y = Math.max(mapDimension.y, targetCoordinate.y + 1);

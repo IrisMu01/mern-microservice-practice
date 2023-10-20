@@ -231,7 +231,7 @@ export const humanActions = {
         // - starting clockwise on top of the cell, if neighbour cell is cursed then change neighbour cell to grass
         const surroundingCells = gameUtils.getSurroundingCellsForHuman(state);
         _.forEach(surroundingCells, cell => {
-            if (mapValue.cursedGrass === cell.mapValue && budget > 0) {
+            if (mapValue.cursedGrass === cell.mapValue && remainingEnergy > 0) {
                 state.map.terrain[cell.x][cell.y] = mapValue.grass;
                 remainingEnergy -= 1;
             }

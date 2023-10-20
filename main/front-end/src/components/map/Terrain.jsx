@@ -9,7 +9,8 @@ const cell = {
     gr: { className: "grass" },
     ho: { className: "house", component: <FontAwesomeIcon icon={"house"}/> },
     pa: { className: "paw", component: <FontAwesomeIcon icon={"paw"}/> },
-    ri: { className: "river",  component: <FontAwesomeIcon icon={"water"}/> },
+    wa: { className: "water",  component: <FontAwesomeIcon icon={"water"}/> },
+    wd: { className: "water-deep",  component: <FontAwesomeIcon icon={"water"}/> },
     se: { className: "seedling", component: <FontAwesomeIcon icon={"seedling"}/> },
     tr: { className: "tree", component: <FontAwesomeIcon icon={"tree"}/> },
     wi: { className: "wilt", component: <FontAwesomeIcon icon={"plant-wilt"}/> }

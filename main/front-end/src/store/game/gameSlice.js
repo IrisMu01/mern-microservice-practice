@@ -18,8 +18,8 @@ const mockMap = [
     ["cg", "tr", "tr", "gr", "wa", "gr"],
     ["cg", "gr", "fa", "fa", "wa", "wa"],
     ["tr", "gr", "se", "ho", "bo", "wa"],
-    ["cg", "bt", "gr", "wa", "wa", "wi"],
-    ["wa", "cg", "wa", "wa", "cg", "pa"]
+    ["cg", "bt", "wa", "wa", "wa", "wi"],
+    ["wa", "wa", "wd", "wa", "cg", "pa"]
 ];
 
 const plantEnergyMap = [
@@ -81,12 +81,12 @@ export const gameSlice = createSlice({
                 onBoat: false
             },
             inventory: {
-                seed: 4,
-                sapling: 10,
-                wood: 0,
-                fish: 0,
-                crop: 0,
-                food: 0
+                seed: 4, // later - initialize to 4
+                sapling: 10, // later - initialize to 10
+                wood: 5, // later - initialize to 0
+                fish: 5, // later - initialize to 0
+                crop: 5, // later - initialize to 0
+                food: 5 // later - initialize to 0
             },
         },
         history: {
@@ -112,6 +112,10 @@ export const gameSlice = createSlice({
         }
     },
     reducers: {
+        test: (state, action) => {
+            availableActions.determineForHuman(state);
+            availableActions.determineForDog(state);
+        },
         forwardTime: (state, action) => {
             timeControl.forwardTime(state, action);
             availableActions.determineForHuman(state);
@@ -208,7 +212,7 @@ export const gameSlice = createSlice({
 });
 
 export const {
-    forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
+    test, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
