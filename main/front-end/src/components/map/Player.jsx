@@ -10,18 +10,18 @@ export const Player = () => {
     const PlayerLayerCell = ({x, y}) => {
         if (humanCoordinate.x === x && humanCoordinate.y === y) {
             return (
-                <div className="cell player" key={`player-${x}-${y}`}>
-                    <FontAwesomeIcon icon={"user"}/>
+                <div className="cell player" key={`player-cell-${x}-${y}`}>
+              c      <FontAwesomeIcon icon={"user"}/>
                 </div>
             );
-        } else if (dogCoordinate.x === x && dogCoordinate.y === y && fogMap[x][y]) {
+        } else if (dogCoordinate.x === x && dogCoordinate.y === y && !fogMap[y][x]) {
             return (
-                <div className="cell dog" key={`player-${x}-${y}`}>
+                <div className="cell dog" key={`player-cell-${x}-${y}`}>
                     <FontAwesomeIcon icon={"dog"}/>
                 </div>
             );
         } else {
-            return (<div className="cell" key={`player-${x}-${y}`}></div>);
+            return (<div className="cell" key={`player-cell-${x}-${y}`}></div>);
         }
     }
     

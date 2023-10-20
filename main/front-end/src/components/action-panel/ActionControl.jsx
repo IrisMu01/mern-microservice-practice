@@ -20,7 +20,7 @@ export const ActionControl = () => {
         <div className="d-flex flex-column h-100">
             <div className="mt-auto mb-auto w-100 action-control">
                 {availableActionKeys.map(key => (
-                    <div className="me-2 mb-2">
+                    <div className="me-2 mb-2" key={`action-${key}`}>
                         <Button variant="secondary" size="sm">
                             {humanActionTypes[key]}
                         </Button>

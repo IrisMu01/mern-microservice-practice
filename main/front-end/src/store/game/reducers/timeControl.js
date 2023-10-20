@@ -74,25 +74,25 @@ export const timeControl = {
             for (let j = 0; j < state.terrain.dimension.y; j++) {
             
                 // boolean tracker for determining winning conditions
-                if (mapValue.cursedGrass === state.map.terrain[i][j] || mapValue.wilt === state.map.terrain[i][j]) {
+                if (mapValue.cursedGrass === state.terrain.map[i][j] || mapValue.wilt === state.terrain.map[i][j]) {
                     noCursedGrassOrWilt = false;
                 }
             
                 // baby tree: if lifeNum < plantEnergy, grow; else +min(50, lifeNum) to plantEnergy
-                if (mapValue.babyTree === state.map.terrain[i][j])
-                    if (lifeNum < state.map.plantEnergyMap[i][j]) {
-                        state.map.terrain[i][j] = mapValue.tree;
-                        state.map.plantEnergyMap[i][j] = 100;
+                if (mapValue.babyTree === state.terrain.map[i][j])
+                    if (lifeNum < state.terrain.plantEnergyMap[i][j]) {
+                        state.terrain.map[i][j] = mapValue.tree;
+                        state.terrain.plantEnergyMap[i][j] = 100;
                     } else {
-                        state.map.plantEnergyMap[i][j] += Math.min(50, lifeNum);
+                        state.terrain.plantEnergyMap[i][j] += Math.min(50, lifeNum);
                     }
             
                 // tree: if deathNum > plantEnergy, wilt; else -max(33, deathNum) to plantEnergy
-                if (mapValue.tree === state.map.terrain[i][j]) {
-                    if (deathNum > state.map.plantEnergyMap[i][j]) {
-                        state.map.terrain[i][j] = mapValue.wilt;
+                if (mapValue.tree === state.terrain.map[i][j]) {
+                    if (deathNum > state.terrain.plantEnergyMap[i][j]) {
+                        state.terrain.map[i][j] = mapValue.wilt;
                     } else {
-                        state.map.plantEnergyMap[i][j] -= Math.max(33, deathNum);
+                        state.terrain.plantEnergyMap[i][j] -= Math.max(33, deathNum);
                     }
                 }
             
@@ -100,27 +100,27 @@ export const timeControl = {
                 // if spread:
                 //      wilt becomes cursed grass
                 //      if neighbouring cell has tree/sapling, cell becomes wilt; otherwise cell becomes cursed grassland
-                if (mapValue.wilt === state.map.terrain[i][j]) {
+                if (mapValue.wilt === state.terrain.map[i][j]) {
                     if (deathNum > 49) {
-                        state.map.terrain[i][j] = mapValue.cursedGrass;
+                        state.terrain.map[i][j] = mapValue.cursedGrass;
                         const wiltSpread = _.floor(deathNum / 12.5);
                         const affectedCells = gameUtils.getSurroundingCells(state.terrain.map, state.terrain.dimension, i, j).slice(0, wiltSpread);
                         _.forEach(affectedCells, affectedCell => {
                             if (mapValue.babyTree === affectedCell.mapValue || mapValue.tree === affectedCell.mapValue) {
-                                state.map.terrain[affectedCell.x][affectedCell.y] = mapValue.wilt;
+                                state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.wilt;
                             } else {
-                                state.map.terrain[affectedCell.x][affectedCell.y] = mapValue.cursedGrass;
+                                state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.cursedGrass;
                             }
                         });
                     }
                 }
             
                 // crop seedling: if lifeNum < plantEnergy, mature; else + min(50, lifeNum) to plantEnergy
-                if (mapValue.seedling === state.map.terrain[i][j]) {
-                    if (lifeNum < state.map.plantEnergyMap[i][j]) {
-                        state.map.terrain[i][j] = mapValue.farm;
+                if (mapValue.seedling === state.terrain.map[i][j]) {
+                    if (lifeNum < state.terrain.plantEnergyMap[i][j]) {
+                        state.terrain.map[i][j] = mapValue.farm;
                     } else {
-                        state.map.plantEnergyMap[i][j] += Math.min(50, lifeNum);
+                        state.terrain.plantEnergyMap[i][j] += Math.min(50, lifeNum);
                     }
                 }
             }
@@ -163,15 +163,15 @@ export const timeControl = {
         for (let i = 0; i < state.terrain.dimension.x; i++) {
             for (let j = 0; j < state.terrain.dimension.y; j++) {
                 // wilt: becomes tree; cell plantEnergy gets assigned lifeNum
-                if (mapValue.wilt === state.map.terrain[i][j]) {
-                    state.map.terrain[i][j] = mapValue.tree;
-                    state.map.plantEnergyMap[i][j] = lifeNum;
+                if (mapValue.wilt === state.terrain.map[i][j]) {
+                    state.terrain.map[i][j] = mapValue.tree;
+                    state.terrain.plantEnergyMap[i][j] = lifeNum;
                 }
             
                 // farm: if plantEnergy < lifeNum, revert to seedling
-                if (mapValue.farm === state.map.terrain[i][j]) {
-                    if (state.map.plantEnergyMap[i][j] < lifeNum) {
-                        state.map.terrain[i][j] = mapValue.seedling;
+                if (mapValue.farm === state.terrain.map[i][j]) {
+                    if (state.terrain.plantEnergyMap[i][j] < lifeNum) {
+                        state.terrain.map[i][j] = mapValue.seedling;
                     }
                 }
             }

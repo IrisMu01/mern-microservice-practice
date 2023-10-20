@@ -6,7 +6,7 @@ export const humanActions = {
     explore: (state) => {
         const surroundingCells = gameUtils.getSurroundingCellsForHuman(state);
         const unknownSurroundingCellExists = _.chain(surroundingCells)
-            .map(cell => state.map.fogMap[cell.x][cell.y])
+            .map(cell => state.terrain.fogMap[cell.y][cell.x])
             .reduce((acc, unknown) => acc || unknown, false)
             .value();
         if (!unknownSurroundingCellExists) {
@@ -17,10 +17,10 @@ export const humanActions = {
         let discoveredCursedGrassCount = 0;
         // set surrounding cells unknown to false
         _.forEach(surroundingCells, cell => {
-            if (state.map.terrain[cell.x][cell.y] && mapValue.cursedGrass === cell.mapValue) {
+            if (state.terrain.map[cell.y][cell.x] && mapValue.cursedGrass === cell.mapValue) {
                 discoveredCursedGrassCount += 1;
             }
-            state.map.fogMap[cell.x][cell.y] = false;
+            state.terrain.fogMap[cell.y][cell.x] = false;
         });
     
         // sanity -5 per cursed grass per discovered cursed grass
@@ -69,7 +69,7 @@ export const humanActions = {
             return;
         }
     
-        state.map.terrain[humanCoordinate.x][humanCoordinate.y] = mapValue.boat;
+        state.terrain.map[humanCoordinate.y][humanCoordinate.x] = mapValue.boat;
         state.player.inventory.wood -= 5;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
@@ -112,9 +112,9 @@ export const humanActions = {
         // - modify map
         // - inventory seed -1
         // - plantEnergy resets to 0
-        state.map.terrain[currentX][currentY] = mapValue.seedling;
+        state.terrain.map[currentY][currentX] = mapValue.seedling;
         state.player.inventory.seed -= 1;
-        state.map.plantEnergyMap[currentX][currentY] = 0;
+        state.terrain.plantEnergyMap[currentY][currentX] = 0;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
     },
@@ -137,7 +137,7 @@ export const humanActions = {
         // - inventory sapling -1
         // - plantEnergy on cell resets to 0
         state.player.inventory.sapling -= 1;
-        state.map.plantEnergyMap[currentX][currentY] = 0;
+        state.terrain.plantEnergyMap[currentY][currentX] = 0;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
     },
@@ -156,7 +156,7 @@ export const humanActions = {
         // - cell becomes grass
         // - seed +2 if number > 0, else +1
         // - crop +(5 + number)
-        state.map.terrain[currentX][currentY] = mapValue.grass;
+        state.terrain.map[currentY][currentX] = mapValue.grass;
         state.player.inventory.seed += harvestLuck > 0 ? 2 : 1;
         state.player.inventory.crop += 5 + harvestLuck;
         state.player.humanStatus.actionPoints -= 1;
@@ -217,8 +217,6 @@ export const humanActions = {
         if (gameUtils.isHumanOnUnexploredCell(state) || state.player.humanStatus.actionPoints < 1) {
             return;
         }
-        const currentX = state.player.humanCoordinate.x;
-        const currentY = state.player.humanCoordinate.y;
         if (mapValue.tree !== gameUtils.getCurrentCellForHuman(state)) {
             return;
         }
@@ -232,7 +230,7 @@ export const humanActions = {
         const surroundingCells = gameUtils.getSurroundingCellsForHuman(state);
         _.forEach(surroundingCells, cell => {
             if (mapValue.cursedGrass === cell.mapValue && remainingEnergy > 0) {
-                state.map.terrain[cell.x][cell.y] = mapValue.grass;
+                state.terrain.map[cell.y][cell.x] = mapValue.grass;
                 remainingEnergy -= 1;
             }
         });
@@ -253,7 +251,7 @@ export const humanActions = {
         }
     
         // - cell becomes grass
-        state.map.terrain[state.player.humanCoordinate.x][state.player.humanCoordinate.y] = mapValue.grass;
+        state.terrain.map[state.player.humanCoordinate.x][state.player.humanCoordinate.y] = mapValue.grass;
         // - consume 1 action point
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
@@ -264,7 +262,7 @@ export const dogActions = {
     explore: (state) => {
         const surroundingCells = gameUtils.getSurroundingCellsForDog(state);
         const unknownSurroundingCellExists = _.chain(surroundingCells)
-            .map(cell => state.map.fogMap[cell.x][cell.y])
+            .map(cell => state.terrain.fogMap[cell.y][cell.x])
             .reduce((acc, unknown) => acc || unknown, false)
             .value();
         if (!unknownSurroundingCellExists) {
@@ -272,10 +270,9 @@ export const dogActions = {
             return;
         }
     
-        let discoveredCursedGrassCount = 0;
         // set surrounding cells unknown to false
         _.forEach(surroundingCells, cell => {
-            state.map.fogMap[cell.x][cell.y] = false;
+            state.terrain.fogMap[cell.y][cell.x] = false;
         });
         
         state.player.dogStatus.actionPoints -= 1;
@@ -291,7 +288,7 @@ export const dogActions = {
         }
     
         // - cell becomes grass
-        state.map.terrain[state.player.dogCoordinate.x][state.player.dogCoordinate.y] = mapValue.grass;
+        state.terrain.map[state.player.dogCoordinate.x][state.player.dogCoordinate.y] = mapValue.grass;
         // - consume 1 action point
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;

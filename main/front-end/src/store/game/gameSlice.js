@@ -61,7 +61,7 @@ export const gameSlice = createSlice({
         },
         player: {
             humanCoordinate: {x: 3, y: 3},
-            dogCoordinate: {x: 5, y: 0},
+            dogCoordinate: {x: 3, y: 0},
             round: 1, // 6 rounds per day
             trueRound: 1, // only increments
             switchedToHuman: true,
@@ -75,7 +75,7 @@ export const gameSlice = createSlice({
             },
             dogStatus: {
                 alive: true,
-                onTeam: false,
+                onTeam: true, // initialize to false
                 hunger: 10,
                 actionPoints: 3, // will be variable by hunger in the future
                 onBoat: false
@@ -117,13 +117,15 @@ export const gameSlice = createSlice({
             availableActions.determineForDog(state);
         },
         forwardTime: (state, action) => {
-            timeControl.forwardTime(state, action);
+            const lifeNum = action.payload.lifeNum, deathNum = action.payload.deathNum;
+            timeControl.forwardTime(state, lifeNum, deathNum);
             availableActions.determineForHuman(state);
             availableActions.determineForDog(state);
             losingConditions.check(state);
         },
         reverseTime: (state, action) => {
-            timeControl.reverseTime(state, action);
+            const lifeNum = action.payload.lifeNum;
+            timeControl.reverseTime(state, lifeNum);
             availableActions.determineForHuman(state);
             availableActions.determineForDog(state);
             losingConditions.check(state)

@@ -16,21 +16,21 @@ export const movements = {
         
         switch (direction) {
             case "w":
-                targetCoordinate.y = Math.max(mapDimension.y, targetCoordinate.y + 1);
-                break;
-            case "a":
-                targetCoordinate.x = Math.max(0, targetCoordinate.x - 1);
-                break;
-            case "s":
                 targetCoordinate.y = Math.max(0, targetCoordinate.y - 1);
                 break;
+            case "a":
+                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x - 1);
+                break;
+            case "s":
+                targetCoordinate.y = Math.min(mapDimension.y, targetCoordinate.y + 1);
+                break;
             case "d":
-                targetCoordinate.x = Math.max(mapDimension.x, targetCoordinate.x + 1);
+                targetCoordinate.x = Math.max(0, targetCoordinate.x + 1);
                 break;
             default:
                 return;
         }
-        const targetCell = state.map.terrain[targetCoordinate.x][targetCoordinate.y];
+        const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
     
         const targetIsWater = mapValue.water === targetCell || mapValue.boat === targetCell || mapValue.waterDeep === targetCell;
         if (state.player.humanStatus.onBoat && !targetIsWater) {
@@ -39,8 +39,8 @@ export const movements = {
         } else if (state.player.humanStatus.onBoat && targetIsWater) {
             // if onBoat, and walking into water: change player/boat/dog coordinate, swap map boat/water cells
             const tempCell = _.clone(targetCell);
-            state.map.terrain[targetCoordinate.x][targetCoordinate.y] = state.map.terrain[startingCoordinate.x][startingCoordinate.y];
-            state.map.terrain[startingCoordinate.x][startingCoordinate.y] = tempCell;
+            state.terrain.map[targetCoordinate.y][targetCoordinate.x] = state.terrain.map[startingCoordinate.y][startingCoordinate.x];
+            state.terrain.map[startingCoordinate.y][startingCoordinate.x] = tempCell;
         } else if (!state.player.humanStatus.onBoat && targetIsWater) {
             // if not onBoat, cannot walk into water
             return;
@@ -64,24 +64,24 @@ export const movements = {
         const startingCoordinate = _.cloneDeep(state.player.dogCoordinate);
         const targetCoordinate = {x: startingCoordinate.x, y: startingCoordinate.y};
         const mapDimension = state.terrain.dimension;
-        
+    
         switch (direction) {
             case "w":
-                targetCoordinate.y = Math.max(mapDimension.y, targetCoordinate.y + 1);
-                break;
-            case "a":
-                targetCoordinate.x = Math.max(0, targetCoordinate.x - 1);
-                break;
-            case "s":
                 targetCoordinate.y = Math.max(0, targetCoordinate.y - 1);
                 break;
+            case "a":
+                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x - 1);
+                break;
+            case "s":
+                targetCoordinate.y = Math.min(mapDimension.y, targetCoordinate.y + 1);
+                break;
             case "d":
-                targetCoordinate.x = Math.max(mapDimension.x, targetCoordinate.x + 1);
+                targetCoordinate.x = Math.max(0, targetCoordinate.x + 1);
                 break;
             default:
                 return;
         }
-        const targetCell = state.map.terrain[targetCoordinate.x][targetCoordinate.y];
+        const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
     
         if (state.player.dogStatus.onBoat && (mapValue.water === targetCell || mapValue.waterDeep === targetCell)) {
             // cannot move if onBoat - human boat movement already updates dog coordinate

@@ -3,8 +3,8 @@ const getSurroundingCellsInternal = (map, mapDimension, x, y) => {
         return [];
     }
     const cells = [];
-    for (let i = x-1; i < Math.min(x+1, mapDimension.x); i++) {
-        for (let j = y-1; j < Math.min(y+1, mapDimension.y); j++) {
+    for (let i = Math.max(0, x-1); i <= Math.min(x+1, mapDimension.x); i++) {
+        for (let j = Math.max(0, y-1); j <= Math.min(y+1, mapDimension.y); j++) {
             if (i !== x || j !== y) {
                 cells.push({
                     x: i,
