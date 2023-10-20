@@ -11,105 +11,16 @@ $grass-color: #629b54;
   font-size: 20px;
 }
 
+.action-control {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .action-panel {
   background-color: #4b4b4b;
   border-radius: 5px;
   padding: 15px 20px;
-}
-
-.human-status, .dog-status {
-  display: flex;
-  margin-bottom: 15px;
-
-  .status-entity-icon {
-    width: 52px;
-    margin-right: 20px;
-  }
-
-  .statuses {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-
-    .status {
-      display: flex;
-
-      .hunger {
-        color: #ffae5a;
-      }
-      .sanity {
-        color: #ffafaf;
-      }
-    }
-  }
-
-  .progress-bar-wrapper {
-    margin-left: 10px;
-    width: 200px;
-  }
-}
-
-.inventory {
-  margin-bottom: 15px;
-
-  .inventory-icon {
-    display: inline-block;
-    width: 20px;
-    margin-right: 10px;
-
-    &.seed {
-      color: #b3e55c;
-    }
-    &.sapling {
-      color: #b4f38f;
-    }
-    &.wood {
-      color: #b07655;
-    }
-    &.fish {
-      color: #75c5d3;
-    }
-    &.crop {
-      color: #efa860;
-    }
-    &.food {
-      color: #ef8140;
-    }
-  }
-
-
-}
-
-.movement-control {
-  .movement-icon {
-    margin: $movement-icon-size * 0.1;
-    width: $movement-icon-size * 1.5;
-    height: $movement-icon-size * 1.5;
-    font-size: $movement-icon-size;
-    border-radius: $movement-icon-size * 0.3;
-    background-color: #8a8a8a;
-    text-align: center;
-
-    &.hidden {
-      opacity: 0.4;
-    }
-  }
-}
-
-.map-container {
-  position: relative;
-}
-
-.terrain-layer, .player-layer, .fog-layer {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-}
-
-.map-row {
-  display: flex;
-  width: 100%;
 }
 
 .cell {
@@ -216,5 +127,106 @@ $grass-color: #629b54;
     }
   }
 }
+
+.human-status, .dog-status {
+  display: flex;
+  margin-bottom: 15px;
+
+  .status-entity-icon {
+    width: 52px;
+    margin-right: 20px;
+  }
+
+  .statuses {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .status {
+      display: flex;
+
+      .hunger {
+        color: #ffae5a;
+      }
+      .sanity {
+        color: #ffafaf;
+      }
+    }
+  }
+
+  .progress-bar-wrapper {
+    margin-left: 10px;
+    width: 200px;
+  }
+}
+
+.inventory {
+  margin-bottom: 15px;
+
+  .inventory-icon {
+    display: inline-block;
+    width: 20px;
+    margin-right: 10px;
+
+    &.seed {
+      color: #b3e55c;
+    }
+    &.sapling {
+      color: #b4f38f;
+    }
+    &.wood {
+      color: #b07655;
+    }
+    &.fish {
+      color: #75c5d3;
+    }
+    &.crop {
+      color: #efa860;
+    }
+    &.food {
+      color: #ef8140;
+    }
+  }
+}
+
+.map-container {
+  position: relative;
+}
+
+.map-layer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.map-row {
+  display: flex;
+  width: 100%;
+}
+
+.movement-control {
+  .movement-icon {
+    margin: $movement-icon-size * 0.1;
+    width: $movement-icon-size * 1.5;
+    height: $movement-icon-size * 1.5;
+    font-size: $movement-icon-size;
+    border-radius: $movement-icon-size * 0.3;
+    background-color: #8a8a8a;
+    text-align: center;
+
+    &.hidden {
+      opacity: 0.4;
+    }
+  }
+}
+
+.time-control {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
 
 /* todo: responsive design */

@@ -3,6 +3,7 @@ import {DogStatus} from "./DogStatus";
 import {Inventory} from "./Inventory";
 import {MovementControl} from "./MovementControl";
 import {ActionControl} from "./ActionControl";
+import {TimeControl} from "./TimeControl";
 
 export const ActionPanel = () => {
     return (
@@ -18,14 +19,7 @@ export const ActionPanel = () => {
                     <MovementControl/>
                 </div>
             </div>
-            <div>
-                <div>
-                    clock | round count
-                </div>
-                <div>
-                    forward/reverse time
-                </div>
-            </div>
+            <TimeControl/>
         </div>
     )
 }

@@ -112,7 +112,7 @@ export const gameSlice = createSlice({
         }
     },
     reducers: {
-        test: (state, action) => {
+        determineAvailableActions: (state, action) => {
             availableActions.determineForHuman(state);
             availableActions.determineForDog(state);
         },
@@ -212,7 +212,7 @@ export const gameSlice = createSlice({
 });
 
 export const {
-    test, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
+    determineAvailableActions, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

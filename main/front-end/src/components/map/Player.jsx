@@ -26,7 +26,7 @@ export const Player = () => {
     }
     
     return (
-        <div className="player-layer">
+        <div className="map-layer">
             {[...Array(dimension.x + 1)].map((i, y) => (
                 <div className="map-row" key={`player-row-${y}`}>
                     {[...Array(dimension.y + 1)].map((j, x) => (

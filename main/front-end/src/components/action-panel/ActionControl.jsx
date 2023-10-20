@@ -1,21 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
-import { test } from "../../store/game/gameSlice";
+import { determineAvailableActions } from "../../store/game/gameSlice";
+import { humanActionTypes } from "../../utils/constants";
+import Button from "react-bootstrap/Button";
 import _ from "lodash";
 
 export const ActionControl = () => {
     const dispatch = useDispatch();
-    dispatch(test()); // initializes the available actions
+    dispatch(determineAvailableActions());
     const availableActions = useSelector(state => state.game.availableActions);
-    console.log(availableActions);
+    
+    let availableActionKeys = [];
     _.forEach(availableActions.human, (value, key) => {
         if (value) {
-            console.log(key);
+            availableActionKeys.push(key);
         }
     });
     
     return (
-        <div className="action-control">
-        
+        <div className="d-flex flex-column h-100">
+            <div className="mt-auto mb-auto w-100 action-control">
+                {availableActionKeys.map(key => (
+                    <div className="me-2 mb-2">
+                        <Button variant="secondary" size="sm">
+                            {humanActionTypes[key]}
+                        </Button>
+                    </div>
+                ))}
+            </div>
         </div>
-    )
+    );
 }

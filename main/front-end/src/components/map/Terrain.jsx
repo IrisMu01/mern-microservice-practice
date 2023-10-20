@@ -20,7 +20,7 @@ export const Terrain = () => {
     const terrain = useSelector(state => state.game.terrain.map);
     
     return (
-        <div className="terrain-layer">
+        <div className="map-layer">
             {terrain.map((row, y) => (
                 <div className="map-row" key={`terrain-${y}`}>
                     {row.map((cellName, x) => (

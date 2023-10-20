@@ -4,7 +4,7 @@ export const Fog = () => {
     const fogMap = useSelector(state => state.game.terrain.fogMap);
     
     return (
-        <div className="fog-layer">
+        <div className="map-layer">
             {fogMap.map((row, y) => (
                 <div className="map-row" key={`fog-${y}`}>
                     {row.map((isUnknown, x) => (
