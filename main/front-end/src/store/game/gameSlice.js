@@ -1,18 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mapValue, humanAction, dogAction } from "../../utils/constants";
-import { getSurroundingCells, getDirectSurroundingCells } from "../../utils/utils";
-import { forwardTime } from "./reducers/forwardTime";
-import { reverseTime } from "./reducers/reverseTime";
-import { switchBetweenHumanAndDog, movePlayer, moveDog } from "./reducers/movements";
-import { explore, interactWithWater, interactWithGrass, interactWithCrop, interactWithHouse, interactWithTree, interactWithWilt, interactWithDog } from "./reducers/interactions";
-import { determineHumanActions, determineDogActions } from "./reducers/determineAvailableActions";
+import { humanActionTypes, dogActionTypes } from "../../utils/constants";
+import { timeControl } from "./reducers/timeControl";
+import { movements } from "./reducers/movements";
+import { humanActions, dogActions } from "./reducers/interactions";
+import { availableActions } from "./reducers/availableActions";
+import { losingConditions } from "./reducers/losingConditions";
 import _ from "lodash";
-
-const environmentSanityBonus = {};
-environmentSanityBonus[mapValue.cursedGrass] = -3;
-environmentSanityBonus[mapValue.babyTree] = 1;
-environmentSanityBonus[mapValue.tree] = 3;
-environmentSanityBonus[mapValue.wilt] = -2;
 
 // the largest index number within the matrix rows and columns.
 const mapDimension = {
@@ -21,12 +14,12 @@ const mapDimension = {
 };
 
 const mockMap = [
-    ["cg", "cg", "cg", "cg", "ri", "gr"],
-    ["cg", "tr", "tr", "gr", "ri", "gr"],
-    ["cg", "gr", "fa", "fa", "ri", "ri"],
-    ["tr", "gr", "se", "ho", "bo", "ri"],
-    ["cg", "bt", "gr", "ri", "ri", "wi"],
-    ["ri", "cg", "ri", "ri", "cg", "pa"]
+    ["cg", "cg", "cg", "cg", "wa", "gr"],
+    ["cg", "tr", "tr", "gr", "wa", "gr"],
+    ["cg", "gr", "fa", "fa", "wa", "wa"],
+    ["tr", "gr", "se", "ho", "bo", "wa"],
+    ["cg", "bt", "gr", "wa", "wa", "wi"],
+    ["wa", "cg", "wa", "wa", "cg", "pa"]
 ];
 
 const plantEnergyMap = [
@@ -48,17 +41,18 @@ const unknowns = [
 ];
 
 const humanAvailableActions = {};
-_.forEach(humanAction, (value, key) => {
+_.forEach(humanActionTypes, (value, key) => {
     humanAvailableActions[value] = false;
 });
 const dogAvailableActions = {};
-_.forEach(dogAction, (value, key) => {
+_.forEach(dogActionTypes, (value, key) => {
     dogAvailableActions[value] = false;
 });
 
 export const gameSlice = createSlice({
     name: "currentTerrain",
     initialState: {
+        gameStatus: null, // true - winning | false - losing | null - in progress
         terrain: {
             dimension: mapDimension,
             map: mockMap,
@@ -75,8 +69,9 @@ export const gameSlice = createSlice({
                 hunger: 80,
                 sanity: 60,
                 actionPoints: 5, // will be variable by hunger/sanity in the future
-                onBoat: false,
-                resting: false
+                restPoints: 0,
+                workPoints: 0,
+                onBoat: false
             },
             dogStatus: {
                 alive: true,
@@ -117,52 +112,103 @@ export const gameSlice = createSlice({
         }
     },
     reducers: {
-        // todo separate failing condition checks out of each function
         forwardTime: (state, action) => {
-            forwardTime(state, action);
-            determineHumanActions(state);
-            determineDogActions(state);
+            timeControl.forwardTime(state, action);
+            availableActions.determineForHuman(state);
+            availableActions.determineForDog(state);
+            losingConditions.check(state);
         },
         reverseTime: (state, action) => {
-            reverseTime(state, action);
-            determineHumanActions(state);
-            determineDogActions(state);
+            timeControl.reverseTime(state, action);
+            availableActions.determineForHuman(state);
+            availableActions.determineForDog(state);
+            losingConditions.check(state)
         },
         switchBetweenHumanAndDog: (state, action) => {
-            switchBetweenHumanAndDog(state, action);
+            movements.switchBetweenHumanAndDog(state, action);
         },
-        movePlayer: (state, action) => {
-            movePlayer(state, action);
-            determineHumanActions(state);
+        moveHuman: (state, action) => {
+            movements.moveHuman(state, action.payload);
+            availableActions.determineForHuman(state);
         },
         moveDog: (state, action) => {
-            moveDog(state, action);
-            determineDogActions(state);
+            movements.moveDog(state, action.payload);
+            availableActions.determineForDog(state);
         },
         explore: (state, action) => {
-            explore(state, action);
-            determineHumanActions(state);
-            determineDogActions(state);
+            humanActions.explore(state, action);
+            availableActions.determineForHuman(state);
+            availableActions.determineForDog(state);
+            losingConditions.check(state);
         },
         dogExplore: (state, action) => {
-            // todo dog explore
-            determineHumanActions(state);
-            determineDogActions(state);
+            dogActions.explore(state, action);
+            availableActions.determineForHuman(state);
+            availableActions.determineForDog(state);
         },
-        interactWithWater: interactWithWater,
-        interactWithGrass: interactWithGrass,
-        interactWithCrop: interactWithCrop,
-        interactWithHouse: interactWithHouse,
-        interactWithTree: interactWithTree,
-        interactWithWilt: interactWithWilt,
-        interactWithDog: interactWithDog
+        humanAction: (state, action) => {
+            const actionType = action.payload.actionType;
+            const luckNumber = action.payload.luckNumber;
+            switch (actionType) {
+                case humanActionTypes.explore:
+                    humanActions.explore(state);
+                    break;
+                case humanActionTypes.feedDog:
+                    humanActions.feedDog(state);
+                    break;
+                case humanActionTypes.buildBoat:
+                    humanActions.buildBoat(state);
+                    break;
+                case humanActionTypes.fish:
+                    humanActions.fish(state, luckNumber);
+                    break;
+                case humanActionTypes.startFarm:
+                    humanActions.startFarm(state);
+                    break;
+                case humanActionTypes.plantTree:
+                    humanActions.plantTree(state);
+                    break;
+                case humanActionTypes.harvest:
+                    humanActions.harvest(state, luckNumber);
+                    break;
+                case humanActionTypes.releaseTreeEnergy:
+                    humanActions.releaseTreeEnergy(state, luckNumber);
+                    break;
+                case humanActionTypes.makeFood:
+                    humanActions.makeFood(state);
+                    break;
+                case humanActionTypes.eat:
+                    humanActions.eat(state);
+                    break;
+                case humanActionTypes.rest:
+                    humanActions.rest(state);
+                    break;
+                case humanActionTypes.cleanWilt:
+                    humanActions.cleanWilt(state);
+                    break;
+                default:
+                    console.warn("Invalid human action type: " + actionType);
+            }
+            losingConditions.check(state);
+        },
+        dogAction: (state, action) => {
+            const actionType = action.payload.actionType;
+            switch (actionType) {
+                case dogActionTypes.explore:
+                    dogActions.explore(state);
+                    break;
+                case dogActionTypes.cleanWilt:
+                    dogActions.cleanWilt(state);
+                    break;
+                default:
+                    console.warn("Invalid dog action type: " + actionType);
+            }
+        }
     }
 });
 
 export const {
-    forwardTime, reverseTime, switchBetweenHumanAndDog, movePlayer, moveDog, explore,
-    interactWithWater, interactWithGrass, interactWithCrop, interactWithHouse,
-    interactWithTree, interactWithWilt, interactWithDog
+    forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

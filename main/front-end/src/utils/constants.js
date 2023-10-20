@@ -6,13 +6,14 @@ export const mapValue = {
     grass: "gr",
     house: "ho",
     paw: "pa",
-    river: "ri",
+    water: "wa",
+    waterDeep: "wd",
     seedling: "se",
     tree: "tr",
     wilt: "wi"
 };
 
-export const humanAction = {
+export const humanActionTypes = {
     explore: "Explore",
     feedDog: "Feed dog",
     buildBoat: "Build boat",
@@ -27,7 +28,7 @@ export const humanAction = {
     cleanWilt: "Clean up wilt"
 };
 
-export const dogAction = {
+export const dogActionTypes = {
     explore: "Explore",
     cleanWilt: "Clean up wilt"
 };
