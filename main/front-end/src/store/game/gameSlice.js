@@ -14,11 +14,11 @@ const mapDimension = {
 };
 
 const mockMap = [
-    ["cg", "cg", "cg", "cg", "wa", "gr"],
+    ["cg", "cb", "cg", "cg", "wa", "gr"],
     ["cg", "tr", "tr", "gr", "wa", "gr"],
     ["cg", "gr", "fa", "fa", "wa", "wa"],
     ["tr", "gr", "se", "ho", "bo", "wa"],
-    ["cg", "bt", "wa", "wa", "wa", "wi"],
+    ["ct", "bt", "wa", "wa", "wa", "wi"],
     ["wa", "wa", "wd", "wa", "cg", "pa"]
 ];
 
@@ -78,15 +78,14 @@ export const gameSlice = createSlice({
                 onTeam: false,
                 hunger: 10,
                 actionPoints: 3, // will be variable by hunger in the future
-                onBoat: false
             },
             inventory: {
-                seed: 4,
-                sapling: 10,
+                seed: 2,
+                sapling: 2,
                 wood: 0,
                 fish: 0,
                 crop: 0,
-                food: 0
+                food: 1
             },
         },
         history: {

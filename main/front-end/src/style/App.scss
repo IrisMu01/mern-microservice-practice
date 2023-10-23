@@ -62,11 +62,19 @@ $movement-icon-size: 25 * 1px;
     color: #126206;
     font-size: $cell-icon-size * 0.6;
     padding-top: $cell-icon-size * 0.33;
+    &.on-cursed-grass {
+      background-color: #835a72;
+      color: #ffffff;
+    }
   }
 
   &.tree {
     background-color: $grass-color;
     color: #094900;
+    &.on-cursed-grass {
+      background-color: #835a72;
+      color: #ffffff;
+    }
   }
 
   &.unknown {
@@ -89,7 +97,7 @@ $movement-icon-size: 25 * 1px;
   }
 
   &.wilt {
-    background-color: $grass-color;
+    background-color: #65525a;
     color: #696462;
   }
 

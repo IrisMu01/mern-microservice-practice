@@ -9,10 +9,14 @@ export const availableActions = {
         const humanCoordinate = state.player.humanCoordinate;
         const dogCoordinate = state.player.dogCoordinate;
         const actionPointsAvailable = state.player.humanStatus.actionPoints;
+        
+        if (fogMap[humanCoordinate.y][humanCoordinate.x]) {
+            return;
+        }
     
         const surroundingCells = gameUtils.getSurroundingCellsForHuman(state);
         const explorable = _.filter(surroundingCells, cell => fogMap[cell.y][cell.x]);
-        state.availableActions.human.explore = (fogMap[humanCoordinate.y][humanCoordinate.x] || explorable.length > 0)
+        state.availableActions.human.explore = explorable.length > 0
             && actionPointsAvailable;
     
         state.availableActions.human.feedDog = humanCoordinate.x === dogCoordinate.x && humanCoordinate.y === dogCoordinate.y
@@ -23,10 +27,10 @@ export const availableActions = {
         state.availableActions.human.fish = [mapValue.water, mapValue.boat].includes(map[humanCoordinate.y][humanCoordinate.x])
             && actionPointsAvailable;
     
-        state.availableActions.human.startFarm = map[humanCoordinate.y][humanCoordinate.x] === mapValue.grass
+        state.availableActions.human.startFarm = [mapValue.grass, mapValue.paw].includes(map[humanCoordinate.y][humanCoordinate.x])
             && state.player.inventory.seed > 0 && actionPointsAvailable;
     
-        state.availableActions.human.plantTree = map[humanCoordinate.y][humanCoordinate.x] === mapValue.grass
+        state.availableActions.human.plantTree = [mapValue.grass, mapValue.cursedGrass, mapValue.paw].includes(map[humanCoordinate.y][humanCoordinate.x])
             && state.player.inventory.sapling > 0 && actionPointsAvailable;
     
         state.availableActions.human.harvest = map[humanCoordinate.y][humanCoordinate.x] === mapValue.farm
@@ -40,7 +44,7 @@ export const availableActions = {
     
         state.availableActions.human.rest = map[humanCoordinate.y][humanCoordinate.x] === mapValue.house;
     
-        state.availableActions.human.releaseTreeEnergy = map[humanCoordinate.y][humanCoordinate.x] === mapValue.tree
+        state.availableActions.human.releaseTreeEnergy = [mapValue.tree, mapValue.cursedTree].includes(map[humanCoordinate.y][humanCoordinate.x])
             && actionPointsAvailable;
     
         state.availableActions.human.cleanWilt = map[humanCoordinate.y][humanCoordinate.x] === mapValue.wilt
@@ -60,6 +64,10 @@ export const availableActions = {
         const humanCoordinate = state.player.humanCoordinate;
         const dogCoordinate = state.player.dogCoordinate;
         const actionPointsAvailable = state.player.dogStatus.actionPoints;
+    
+        if (fogMap[dogCoordinate.y][dogCoordinate.x]) {
+            return;
+        }
     
         const surroundingCells = gameUtils.getSurroundingCellsForDog(state);
         const explorable = _.filter(surroundingCells, cell => fogMap[cell.y][cell.x]);

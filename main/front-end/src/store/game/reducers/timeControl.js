@@ -78,31 +78,50 @@ export const timeControl = {
                     noCursedGrassOrWilt = false;
                 }
             
-                // wilt: if deathNum > 49, spread to a neighbouring cell
+                // wilt: subtract deathNum % 15 from plantEnergy
+                // if new plantEnergy <= 0, spread to a neighbouring cell
                 // if spread:
                 //      wilt becomes cursed grass
-                //      if neighbouring cell has tree/sapling, cell becomes wilt; otherwise cell becomes cursed grassland
+                //      if neighbouring cell has tree/sapling, cell becomes wilt; otherwise non-water/house cell becomes cursed grassland
                 if (mapValue.wilt === state.terrain.map[j][i]) {
-                    if (deathNum > 49) {
+                    state.terrain.plantEnergyMap[j][i] = Math.max(0, state.terrain.plantEnergyMap[j][i] - deathNum % 15);
+                    if (state.terrain.plantEnergyMap[j][i] === 0) {
                         state.terrain.map[j][i] = mapValue.cursedGrass;
                         const wiltSpread = _.floor(deathNum / 25);
                         const affectedCells = gameUtils.getSurroundingCells(state.terrain.map, state.terrain.dimension, i, j).slice(0, wiltSpread);
                         _.forEach(affectedCells, affectedCell => {
                             if (mapValue.babyTree === affectedCell.mapValue || mapValue.tree === affectedCell.mapValue) {
                                 state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.wilt;
-                            } else if (mapValue.house !== affectedCell.mapValue) {
+                            } else if (![mapValue.house, mapValue.waterDeep, mapValue.water, mapValue.boat].includes(affectedCell.mapValue)) {
                                 state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.cursedGrass;
                             }
                         });
                     }
                 }
+                
+                // tree on cursed grass: -max(50, deathNum) to plantEnergy; if deathNum > plantEnergy-50, wilt
+                if (mapValue.cursedTree === state.terrain.map[j][i]) {
+                    state.terrain.plantEnergyMap[j][i] -= Math.max(50, deathNum);
+                    if (deathNum > state.terrain.plantEnergyMap[j][i] - 50) {
+                        state.terrain.map[j][i] = mapValue.wilt;
+                    }
+                }
     
-                // tree: if deathNum > plantEnergy, wilt; else -max(33, deathNum) to plantEnergy
+                // tree: -max(33, deathNum) to plantEnergy; if deathNum > plantEnergy, wilt
                 if (mapValue.tree === state.terrain.map[j][i]) {
+                    state.terrain.plantEnergyMap[j][i] -= Math.max(33, deathNum);
                     if (deathNum > state.terrain.plantEnergyMap[j][i]) {
                         state.terrain.map[j][i] = mapValue.wilt;
+                    }
+                }
+                
+                // baby tree on cursed grass: if lifeNum < plantEnergy, grow; else +min(25, lifeNum) to plantEnergy
+                if (mapValue.cursedBabyTree === state.terrain.map[j][i]) {
+                    if (lifeNum < state.terrain.plantEnergyMap[j][i]) {
+                        state.terrain.map[j][i] = mapValue.cursedTree;
+                        state.terrain.plantEnergyMap[j][i] = 100;
                     } else {
-                        state.terrain.plantEnergyMap[j][i] -= Math.max(33, deathNum);
+                        state.terrain.plantEnergyMap[j][i] += Math.min(50, lifeNum);
                     }
                 }
     

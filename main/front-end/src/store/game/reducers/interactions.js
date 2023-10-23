@@ -14,10 +14,11 @@ export const humanActions = {
             return;
         }
     
+        const cursedCells = [mapValue.cursedGrass, mapValue.cursedTree, mapValue.cursedBabyTree]
         let discoveredCursedGrassCount = 0;
         // set surrounding cells unknown to false
         _.forEach(surroundingCells, cell => {
-            if (state.terrain.map[cell.y][cell.x] && mapValue.cursedGrass === cell.mapValue) {
+            if (state.terrain.map[cell.y][cell.x] && cursedCells.includes(cell.mapValue)) {
                 discoveredCursedGrassCount += 1;
             }
             state.terrain.fogMap[cell.y][cell.x] = false;
@@ -50,7 +51,7 @@ export const humanActions = {
             state.player.dogStatus.onTeam = true;
         }
         state.player.inventory.food -= 1;
-        state.player.dogStatus.hunger += 40;
+        state.player.dogStatus.hunger = Math.min(100, state.player.dogStatus.hunger + 40);
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
     },
@@ -80,8 +81,8 @@ export const humanActions = {
         if (gameUtils.isHumanOnUnexploredCell(state) || state.player.humanStatus.actionPoints < 1) {
             return;
         }
-        // cannot fish if the user is not in shallow water
-        if (mapValue.water !== gameUtils.getCurrentCellForHuman(state)) {
+        // cannot fish if the user is neither in shallow water nor on boat
+        if (![mapValue.water, mapValue.boat].includes(gameUtils.getCurrentCellForHuman(state))) {
             return;
         }
     
@@ -157,10 +158,10 @@ export const humanActions = {
     
         // - cell becomes grass
         // - seed +2 if number > 0, else +1
-        // - crop +(5 + number)
+        // - crop +(1 + number)
         state.terrain.map[currentY][currentX] = mapValue.grass;
         state.player.inventory.seed += harvestLuck > 0 ? 2 : 1;
-        state.player.inventory.crop += 5 + harvestLuck;
+        state.player.inventory.crop += 1 + harvestLuck;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
     },
@@ -197,7 +198,7 @@ export const humanActions = {
             return;
         }
         
-        state.player.humanStatus.hunger += 30;
+        state.player.humanStatus.hunger = Math.min(100, state.player.humanStatus.hunger + 30);
         state.player.inventory.food -= 1;
     },
     rest: (state) => {
@@ -219,7 +220,7 @@ export const humanActions = {
         if (gameUtils.isHumanOnUnexploredCell(state) || state.player.humanStatus.actionPoints < 1) {
             return;
         }
-        if (mapValue.tree !== gameUtils.getCurrentCellForHuman(state)) {
+        if (![mapValue.tree, mapValue.cursedTree].includes(gameUtils.getCurrentCellForHuman(state))) {
             return;
         }
     
@@ -229,17 +230,24 @@ export const humanActions = {
         state.player.inventory.sapling += 2;
         state.player.inventory.wood += 1;
         // - starting clockwise on top of the cell, if neighbour cell is cursed then change neighbour cell to grass
+        // or if the neighbour cell is a tree/baby tree on cursed grass, then change the grass to normal
         const surroundingCells = gameUtils.getSurroundingCellsForHuman(state);
         _.forEach(surroundingCells, cell => {
             if (mapValue.cursedGrass === cell.mapValue && remainingEnergy > 0) {
                 state.terrain.map[cell.y][cell.x] = mapValue.grass;
+                remainingEnergy -= 1;
+            } else if (mapValue.cursedBabyTree === cell.mapValue && remainingEnergy > 0) {
+                state.terrain.map[cell.y][cell.x] = mapValue.babyTree;
+                remainingEnergy -= 1;
+            } else if (mapValue.cursedTree === cell.mapValue && remainingEnergy > 0) {
+                state.terrain.map[cell.y][cell.x] = mapValue.tree;
                 remainingEnergy -= 1;
             }
         });
         // the tree itself becomes grass
         state.terrain.map[state.player.humanCoordinate.y][state.player.humanCoordinate.x] = mapValue.grass;
         // - overflowed healing restores sanity: +3 per over-heal
-        state.player.humanStatus.sanity += 3 * remainingEnergy;
+        state.player.humanStatus.sanity = Math.min(100, state.player.humanStatus.sanity + 3 * remainingEnergy);
         // - consume 1 action point
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;

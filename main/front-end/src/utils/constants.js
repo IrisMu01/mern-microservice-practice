@@ -1,7 +1,9 @@
 export const mapValue = {
     boat: "bo",
     babyTree: "bt",
+    cursedBabyTree: "cb",
     cursedGrass: "cg",
+    cursedTree: "ct",
     farm: "fa",
     grass: "gr",
     house: "ho",

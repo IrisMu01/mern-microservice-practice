@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 const cell = {
     bo: { className: "boat", component: <FontAwesomeIcon icon={"sailboat"}/> },
     bt: { className: "baby-tree", component: <FontAwesomeIcon icon={"tree"} />},
+    cb: { className: "baby-tree on-cursed-grass", component: <FontAwesomeIcon icon={"tree"} />},
     cg: { className: "cursed-grass", component: <FontAwesomeIcon icon={"skull"}/> },
+    ct: { className: "tree on-cursed-grass", component: <FontAwesomeIcon icon={"tree"} />},
     fa: { className: "farm", component: <FontAwesomeIcon icon={"wheat-awn"}/> },
     gr: { className: "grass" },
     ho: { className: "house", component: <FontAwesomeIcon icon={"house"}/> },

@@ -19,17 +19,23 @@ export const movements = {
                 targetCoordinate.y = Math.max(0, targetCoordinate.y - 1);
                 break;
             case "a":
-                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x - 1);
+                targetCoordinate.x = Math.max(0, targetCoordinate.x - 1);
                 break;
             case "s":
                 targetCoordinate.y = Math.min(mapDimension.y, targetCoordinate.y + 1);
                 break;
             case "d":
-                targetCoordinate.x = Math.max(0, targetCoordinate.x + 1);
+                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x + 1);
                 break;
             default:
                 return;
         }
+        
+        // cannot walk into unknown parts of the map
+        if (state.terrain.fogMap[targetCoordinate.y][targetCoordinate.x]) {
+            return;
+        }
+        
         const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
     
         const targetIsWater = mapValue.water === targetCell || mapValue.waterDeep === targetCell;
@@ -76,31 +82,27 @@ export const movements = {
                 targetCoordinate.y = Math.max(0, targetCoordinate.y - 1);
                 break;
             case "a":
-                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x - 1);
+                targetCoordinate.x = Math.max(0, targetCoordinate.x - 1);
                 break;
             case "s":
                 targetCoordinate.y = Math.min(mapDimension.y, targetCoordinate.y + 1);
                 break;
             case "d":
-                targetCoordinate.x = Math.max(0, targetCoordinate.x + 1);
+                targetCoordinate.x = Math.min(mapDimension.x, targetCoordinate.x + 1);
                 break;
             default:
                 return;
         }
-        const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
     
-        if (state.player.dogStatus.onBoat && (mapValue.water === targetCell || mapValue.waterDeep === targetCell)) {
-            // cannot move if onBoat - human boat movement already updates dog coordinate
+        // cannot walk into unknown parts of the map
+        if (state.terrain.fogMap[targetCoordinate.y][targetCoordinate.x]) {
             return;
-        } else if (state.player.dogStatus.onBoat && mapValue.water !== targetCell && mapValue.boat !== targetCell) {
-            // if onBoat and walking onto adjacent land, then set onBoat to false
-            state.player.dogStatus.onBoat = false;
-        } else if (!state.player.dogStatus.onBoat && mapValue.water === targetCell) {
-            // if not onBoat, cannot walk into water
-            return;
-        } else if (!state.player.dogStatus.onBoat && mapValue.boat === targetCell) {
-            // if map coordinate points to boat: set onBoat to true
-            state.player.dogStatus.onBoat = true;
+        }
+        
+        // swimming on water costs dog hunger
+        const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
+        if (targetCell === mapValue.water || targetCell === mapValue.waterDeep) {
+            state.player.dogStatus.hunger -= 3;
         }
     
         // change dog coordinate based on w-a-s-d
