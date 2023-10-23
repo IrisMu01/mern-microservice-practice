@@ -32,12 +32,12 @@ const plantEnergyMap = [
 ];
 
 const unknowns = [
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0],
-    [1, 1, 0, 0, 0, 0]
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1]
 ];
 
 const humanAvailableActions = {};
@@ -68,25 +68,25 @@ export const gameSlice = createSlice({
             humanStatus: {
                 hunger: 80,
                 sanity: 60,
-                actionPoints: 5, // will be variable by hunger/sanity in the future
+                actionPoints: 6, // will be variable by hunger/sanity in the future
                 restPoints: 0,
                 workPoints: 0,
                 onBoat: false
             },
             dogStatus: {
                 alive: true,
-                onTeam: true, // initialize to false
+                onTeam: false,
                 hunger: 10,
                 actionPoints: 3, // will be variable by hunger in the future
                 onBoat: false
             },
             inventory: {
-                seed: 4, // later - initialize to 4
-                sapling: 10, // later - initialize to 10
-                wood: 5, // later - initialize to 0
-                fish: 5, // later - initialize to 0
-                crop: 5, // later - initialize to 0
-                food: 5 // later - initialize to 0
+                seed: 4,
+                sapling: 10,
+                wood: 0,
+                fish: 0,
+                crop: 0,
+                food: 0
             },
         },
         history: {

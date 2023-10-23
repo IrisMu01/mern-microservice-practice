@@ -54,8 +54,8 @@ export const timeControl = {
         // determine next round's available action amount for human & dog: should be variable in the future
         state.player.humanStatus.restPoints = 0;
         state.player.humanStatus.workPoints = 0;
-        state.player.humanStatus.actionPoints = 7;
-        state.player.dogStatus.actionPoints = 5;
+        state.player.humanStatus.actionPoints = 6;
+        state.player.dogStatus.actionPoints = 3;
     
         // ============= history =============
     
@@ -90,7 +90,7 @@ export const timeControl = {
                         _.forEach(affectedCells, affectedCell => {
                             if (mapValue.babyTree === affectedCell.mapValue || mapValue.tree === affectedCell.mapValue) {
                                 state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.wilt;
-                            } else {
+                            } else if (mapValue.house !== affectedCell.mapValue) {
                                 state.terrain.map[affectedCell.y][affectedCell.x] = mapValue.cursedGrass;
                             }
                         });
@@ -134,7 +134,7 @@ export const timeControl = {
         state.player.trueRound += 1;
     
         // reset reverse count to 1
-        state.history.reverseCount -= 1;
+        state.history.reverseCount = 1;
     
         // check success conditions: no cursed grass/wilt
         if (noCursedGrassOrWilt) {
@@ -153,7 +153,9 @@ export const timeControl = {
     
         // set human & dog coordinates based on 1st entry
         state.player.humanCoordinate = state.history.coordinates[0].human;
-        state.player.dogCoordinate = state.history.coordinates[0].dog;
+        if (state.player.dogStatus.onTeam) {
+            state.player.dogCoordinate = state.history.coordinates[0].dog;
+        }
     
         // reduce human sanity based on 25 * reverse count
         state.player.humanStatus.sanity -= 25 * state.history.reverseCount;

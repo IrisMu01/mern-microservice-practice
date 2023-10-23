@@ -236,6 +236,8 @@ export const humanActions = {
                 remainingEnergy -= 1;
             }
         });
+        // the tree itself becomes grass
+        state.terrain.map[state.player.humanCoordinate.y][state.player.humanCoordinate.x] = mapValue.grass;
         // - overflowed healing restores sanity: +3 per over-heal
         state.player.humanStatus.sanity += 3 * remainingEnergy;
         // - consume 1 action point

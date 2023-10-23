@@ -71,12 +71,6 @@ $movement-icon-size: 25 * 1px;
 
   &.unknown {
     background-color: #888;
-    animation: blinker 3s linear infinite;
-    @keyframes blinker {
-      50% {
-        opacity: 0.9;
-      }
-    }
   }
 
   &.water {
