@@ -32,7 +32,7 @@ export const movements = {
         }
         const targetCell = state.terrain.map[targetCoordinate.y][targetCoordinate.x];
     
-        const targetIsWater = mapValue.water === targetCell || mapValue.boat === targetCell || mapValue.waterDeep === targetCell;
+        const targetIsWater = mapValue.water === targetCell || mapValue.waterDeep === targetCell;
         if (state.player.humanStatus.onBoat && !targetIsWater) {
             // if onBoat, and walking onto land: set onBoat to false
             state.player.humanStatus.onBoat = false;
@@ -41,7 +41,7 @@ export const movements = {
             const tempCell = _.clone(targetCell);
             state.terrain.map[targetCoordinate.y][targetCoordinate.x] = state.terrain.map[startingCoordinate.y][startingCoordinate.x];
             state.terrain.map[startingCoordinate.y][startingCoordinate.x] = tempCell;
-        } else if (!state.player.humanStatus.onBoat && targetIsWater) {
+        } else if (!state.player.humanStatus.onBoat && mapValue.waterDeep === targetCell) {
             // if not onBoat, cannot walk into water
             return;
         }
@@ -50,13 +50,19 @@ export const movements = {
         state.player.humanCoordinate = targetCoordinate;
     
         // if human on the same boat with dog, change dog coordinate based on player coordinate
-        if (state.player.dogCoordinate.x === startingCoordinate.x && state.player.dogCoordinate.y === startingCoordinate.y) {
+        if (state.player.dogCoordinate.x === startingCoordinate.x && state.player.dogCoordinate.y === startingCoordinate.y
+            && state.player.humanStatus.onBoat) {
             state.player.dogCoordinate = targetCoordinate;
         }
     
         // if map coordinate points to boat: set onBoat to true
         if (!state.player.humanStatus.onBoat && mapValue.boat === targetCell) {
             state.player.humanStatus.onBoat = true;
+        }
+        
+        // if target coordinate is cursed grass: sanity -5
+        if (mapValue.cursedGrass === targetCell) {
+            state.player.humanStatus.sanity -= 5;
         }
     },
     moveDog: (state, direction) => {

@@ -19,6 +19,12 @@ export const DogStatus = () => {
                         />
                     </div>
                 </div>
+                <div className="status">
+                    {dogStatus.actionPoints} &nbsp;
+                    <small>
+                        action points left this round
+                    </small>
+                </div>
             </div>
         </div>
     )

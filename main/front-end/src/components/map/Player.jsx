@@ -8,10 +8,17 @@ export const Player = () => {
     const fogMap = useSelector(state => state.game.terrain.fogMap);
     
     const PlayerLayerCell = ({x, y}) => {
-        if (humanCoordinate.x === x && humanCoordinate.y === y) {
+        if (humanCoordinate.x === x && dogCoordinate.x === x && humanCoordinate.y === y && dogCoordinate.y === y) {
+            return (
+                <div className="cell player-dog" key={`player-cell-${x}-${y}`}>
+                    <FontAwesomeIcon icon={"user"}/>
+                    <FontAwesomeIcon icon={"dog"}/>
+                </div>
+            );
+        } else if (humanCoordinate.x === x && humanCoordinate.y === y) {
             return (
                 <div className="cell player" key={`player-cell-${x}-${y}`}>
-              c      <FontAwesomeIcon icon={"user"}/>
+                    <FontAwesomeIcon icon={"user"}/>
                 </div>
             );
         } else if (dogCoordinate.x === x && dogCoordinate.y === y && !fogMap[y][x]) {

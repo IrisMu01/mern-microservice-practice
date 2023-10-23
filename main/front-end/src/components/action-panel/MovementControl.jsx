@@ -7,15 +7,12 @@ export const MovementControl = () => {
     const switchedToHuman = useSelector(state => state.game.player.switchedToHuman);
     
     const humanDogSwitch = () => {
-        console.log("switch between human and dog");
         dispatch(switchBetweenHumanAndDog());
     }
     const move = (direction) => () => {
         if (switchedToHuman) {
-            console.log("moving human: " + direction);
             dispatch(moveHuman(direction));
         } else {
-            console.log("moving dog: " + direction);
             dispatch(moveDog(direction));
         }
     };

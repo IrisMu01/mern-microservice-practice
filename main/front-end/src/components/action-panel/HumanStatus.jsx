@@ -7,7 +7,7 @@ export const HumanStatus = () => {
     
     return (
         <div className="human-status">
-            <FontAwesomeIcon className="status-entity-icon fa-3x" icon={"user"}/>
+            <FontAwesomeIcon className="status-entity-icon fa-4x" icon={"user"}/>
             <div className="statuses">
                 <div className="status">
                     <FontAwesomeIcon className="hunger" icon={"drumstick-bite"}/>
@@ -28,6 +28,12 @@ export const HumanStatus = () => {
                             label={humanStatus.sanity}
                         />
                     </div>
+                </div>
+                <div className="status">
+                    {humanStatus.actionPoints} &nbsp;
+                    <small>
+                        action points left this round
+                    </small>
                 </div>
             </div>
         </div>

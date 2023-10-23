@@ -61,7 +61,7 @@ export const gameSlice = createSlice({
         },
         player: {
             humanCoordinate: {x: 3, y: 3},
-            dogCoordinate: {x: 3, y: 0},
+            dogCoordinate: {x: 5, y: 4},
             round: 1, // 6 rounds per day
             trueRound: 1, // only increments
             switchedToHuman: true,

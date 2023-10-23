@@ -107,7 +107,8 @@ $movement-icon-size: 25 * 1px;
   /* ---- player ---- */
   &.player {
     background-color: rgba(255, 255, 255, 0.4);
-    color: #303030;
+    color: #ffffff;
+
     animation: blinker 3s linear infinite;
     @keyframes blinker {
       50% {
@@ -117,8 +118,24 @@ $movement-icon-size: 25 * 1px;
   }
 
   &.dog {
+   background-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+
+    animation: blinker 3s linear infinite;
+    @keyframes blinker {
+      50% {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &.player-dog {
+    padding-top: $cell-icon-size * 0.45;
+    padding-left: $cell-icon-size * 0.1;
+    font-size: $cell-icon-size * 0.5;
     background-color: rgba(255, 255, 255, 0.4);
     color: #ffffff;
+
     animation: blinker 3s linear infinite;
     @keyframes blinker {
       50% {

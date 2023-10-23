@@ -65,12 +65,13 @@ export const humanActions = {
             return;
         }
         // cannot build boat if there isn't enough wood in the inventory
-        if (state.inventory.wood < 5) {
+        if (state.player.inventory.wood < 5) {
             return;
         }
     
         state.terrain.map[humanCoordinate.y][humanCoordinate.x] = mapValue.boat;
         state.player.inventory.wood -= 5;
+        state.player.humanStatus.onBoat = true;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
     },
@@ -137,6 +138,7 @@ export const humanActions = {
         // - inventory sapling -1
         // - plantEnergy on cell resets to 0
         state.player.inventory.sapling -= 1;
+        state.terrain.map[currentY][currentX] = mapValue.babyTree;
         state.terrain.plantEnergyMap[currentY][currentX] = 0;
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
@@ -251,7 +253,7 @@ export const humanActions = {
         }
     
         // - cell becomes grass
-        state.terrain.map[state.player.humanCoordinate.x][state.player.humanCoordinate.y] = mapValue.grass;
+        state.terrain.map[state.player.humanCoordinate.y][state.player.humanCoordinate.x] = mapValue.grass;
         // - consume 1 action point
         state.player.humanStatus.actionPoints -= 1;
         state.player.humanStatus.workPoints += 1;
@@ -288,9 +290,8 @@ export const dogActions = {
         }
     
         // - cell becomes grass
-        state.terrain.map[state.player.dogCoordinate.x][state.player.dogCoordinate.y] = mapValue.grass;
+        state.terrain.map[state.player.dogCoordinate.y][state.player.dogCoordinate.x] = mapValue.grass;
         // - consume 1 action point
-        state.player.humanStatus.actionPoints -= 1;
-        state.player.humanStatus.workPoints += 1;
+        state.player.dogStatus.actionPoints -= 1;
     }
 };

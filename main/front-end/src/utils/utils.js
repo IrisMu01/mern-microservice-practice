@@ -9,7 +9,7 @@ const getSurroundingCellsInternal = (map, mapDimension, x, y) => {
                 cells.push({
                     x: i,
                     y: j,
-                    mapValue: map[i][j]
+                    mapValue: map[j][i]
                 });
             }
         }
@@ -34,16 +34,16 @@ export const gameUtils = {
     },
     getSurroundingCells: getSurroundingCellsInternal,
     getCurrentCellForHuman: (state) => {
-        return state.terrain.map[state.player.humanCoordinate.x][state.player.humanCoordinate.y];
+        return state.terrain.map[state.player.humanCoordinate.y][state.player.humanCoordinate.x];
     },
     getCurrentCellForDog: (state) => {
-        return state.terrain.map[state.player.dogCoordinate.x][state.player.dogCoordinate.y];
+        return state.terrain.map[state.player.dogCoordinate.y][state.player.dogCoordinate.x];
     },
     isHumanOnUnexploredCell: (state) => {
-        return state.terrain.map[state.player.humanCoordinate.x][state.player.humanCoordinate.y];
+        return !state.terrain.map[state.player.humanCoordinate.y][state.player.humanCoordinate.x];
     },
     isDogOnUnexploredCell: (state) => {
-        return state.terrain.map[state.player.dogCoordinate.x][state.player.dogCoordinate.y];
+        return !state.terrain.map[state.player.dogCoordinate.y][state.player.dogCoordinate.x];
     },
     getRandomInteger: (min, max) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -20,7 +20,7 @@ export const availableActions = {
     
         state.availableActions.human.buildBoat = map[humanCoordinate.y][humanCoordinate.x] === mapValue.water
             && state.player.inventory.wood >= 5 && actionPointsAvailable;
-        state.availableActions.human.fish = map[humanCoordinate.y][humanCoordinate.x] === mapValue.water
+        state.availableActions.human.fish = [mapValue.water, mapValue.boat].includes(map[humanCoordinate.y][humanCoordinate.x])
             && actionPointsAvailable;
     
         state.availableActions.human.startFarm = map[humanCoordinate.y][humanCoordinate.x] === mapValue.grass
