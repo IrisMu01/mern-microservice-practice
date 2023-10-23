@@ -141,17 +141,6 @@ export const gameSlice = createSlice({
             movements.moveDog(state, action.payload);
             availableActions.determineForDog(state);
         },
-        explore: (state, action) => {
-            humanActions.explore(state, action);
-            availableActions.determineForHuman(state);
-            availableActions.determineForDog(state);
-            losingConditions.check(state);
-        },
-        dogExplore: (state, action) => {
-            dogActions.explore(state, action);
-            availableActions.determineForHuman(state);
-            availableActions.determineForDog(state);
-        },
         humanAction: (state, action) => {
             const actionType = action.payload.actionType;
             const luckNumber = action.payload.luckNumber;
@@ -214,7 +203,7 @@ export const gameSlice = createSlice({
 });
 
 export const {
-    determineAvailableActions, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, explore, dogExplore, humanAction, dogAction
+    determineAvailableActions, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, humanAction, dogAction
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
