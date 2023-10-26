@@ -21,6 +21,7 @@ export const ActionPanel = () => {
                 </div>
             </div>
             <TimeControl/>
+            <hr></hr>
             <ResetGame/>
         </div>
     )
