@@ -8,13 +8,9 @@ loadIcons();
 function App() {
     return (
     <div className="App">
-      <div className="row mx-0">
-          <div className="col-5">
-              <ActionPanel/>
-          </div>
-          <div className="col-7">
-              <MapContainer/>
-          </div>
+      <div className="d-flex mx-0">
+          <ActionPanel/>
+          <MapContainer/>
       </div>
     </div>
   );

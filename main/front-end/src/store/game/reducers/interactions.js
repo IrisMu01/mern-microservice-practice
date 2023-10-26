@@ -175,14 +175,14 @@ export const humanActions = {
             return;
         }
     
-        // - needs at least 1 action point, but will use all action points this round
+        // - needs at least 1 action point
         // - inventory food +(sum of fish and crop)
         // - inventory fish resets to 0, crop resets to 0
         state.player.inventory.food += state.player.inventory.fish + state.player.inventory.crop;
         state.player.inventory.fish = 0;
         state.player.inventory.crop = 0;
-        state.player.humanStatus.workPoints += _.clone(state.player.humanStatus.actionPoints);
-        state.player.humanStatus.actionPoints = 0;
+        state.player.humanStatus.workPoints += 1;
+        state.player.humanStatus.actionPoints -= 1;
     },
     eat: (state) => {
         // cannot interact if unexplored

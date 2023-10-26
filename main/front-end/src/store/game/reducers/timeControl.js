@@ -16,10 +16,10 @@ export const timeControl = {
         // change human hunger: drop by 15 to a minimum of 0
         state.player.humanStatus.hunger = Math.max(0, state.player.humanStatus.hunger - 15);
     
-        // change dog hunger: drop by 10; dog dies if its hunger drops to -30
+        // change dog hunger: drop by 10; dog dies if its hunger drops to 0
         let dogDeathThisRound = false;
-        state.player.dogStatus.hunger = Math.max(-30, state.player.dogStatus.hunger - 10);
-        if (state.player.dogStatus.hunger < -30 && state.player.dogStatus.alive) {
+        state.player.dogStatus.hunger = Math.max(0, state.player.dogStatus.hunger - 10);
+        if (state.player.dogStatus.hunger <= 0 && state.player.dogStatus.alive) {
             state.player.dogStatus.alive = false;
             state.player.switchedToHuman = true;
             dogDeathThisRound = true;
@@ -37,25 +37,25 @@ export const timeControl = {
         if (dogDeathThisRound) {
             sanityChange -= 40;
         } else if (state.player.dogStatus.alive) {
-            sanityChange += 15;
+            sanityChange += 5;
         }
         const neighbourCells = gameUtils.getSurroundingCellsForHuman(state);
         _.forEach(neighbourCells, cell => {
             sanityChange += environmentSanityBonus[cell.mapValue] || 0;
         });
         if (state.player.round % 6 === 5 || state.player.round % 6 === 4) {
-            sanityChange += 5 * state.player.humanStatus.restPoints;
-            sanityChange -= 5 * state.player.humanStatus.workPoints;
+            sanityChange += 10 * state.player.humanStatus.restPoints;
+            sanityChange -= 10 * state.player.humanStatus.workPoints;
         } else {
-            sanityChange += 2 * state.player.humanStatus.workPoints;
+            sanityChange += 5 * state.player.humanStatus.workPoints;
         }
         state.player.humanStatus.sanity = Math.min(100, state.player.humanStatus.sanity + sanityChange);
     
         // determine next round's available action amount for human & dog: should be variable in the future
         state.player.humanStatus.restPoints = 0;
         state.player.humanStatus.workPoints = 0;
-        state.player.humanStatus.actionPoints = 6;
-        state.player.dogStatus.actionPoints = 3;
+        state.player.humanStatus.actionPoints = state.player.humanStatus.hunger < 50 ? 2 : 3;
+        state.player.dogStatus.actionPoints = state.player.dogStatus.hunger < 50 ? 1 : 2;
     
         // ============= history =============
     
@@ -178,6 +178,12 @@ export const timeControl = {
     
         // reduce human sanity based on 25 * reverse count
         state.player.humanStatus.sanity -= 25 * state.history.reverseCount;
+    
+        // reset action points
+        state.player.humanStatus.restPoints = 0;
+        state.player.humanStatus.workPoints = 0;
+        state.player.humanStatus.actionPoints = state.player.humanStatus.actionPoints + state.player.humanStatus.workPoints + state.player.humanStatus.restPoints;
+        state.player.dogStatus.actionPoints = state.player.dogStatus.hunger < 50 ? 1 : 2;
     
         // ============= do map scan ===============
     

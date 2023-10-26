@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { humanActionTypes, dogActionTypes } from "../../utils/constants";
-import { timeControl } from "./reducers/timeControl";
-import { movements } from "./reducers/movements";
-import { humanActions, dogActions } from "./reducers/interactions";
-import { availableActions } from "./reducers/availableActions";
-import { losingConditions } from "./reducers/losingConditions";
+import {createSlice} from "@reduxjs/toolkit";
+import {humanActionTypes, dogActionTypes} from "../../utils/constants";
+import {timeControl} from "./reducers/timeControl";
+import {movements} from "./reducers/movements";
+import {humanActions, dogActions} from "./reducers/interactions";
+import {availableActions} from "./reducers/availableActions";
+import {losingConditions} from "./reducers/losingConditions";
 import _ from "lodash";
 
 // the largest index number within the matrix rows and columns.
@@ -49,68 +49,83 @@ _.forEach(dogActionTypes, (value, key) => {
     dogAvailableActions[value] = false;
 });
 
+const initialTerrain = {
+    dimension: mapDimension,
+    map: mockMap,
+    fogMap: unknowns,
+    plantEnergyMap: plantEnergyMap
+};
+
+const initialPlayer = {
+    humanCoordinate: {x: 3, y: 3},
+    dogCoordinate: {x: 5, y: 4},
+    round: 1, // 6 rounds per day
+    trueRound: 1, // only increments
+    switchedToHuman: true,
+    humanStatus: {
+        hunger: 80,
+        sanity: 60,
+        actionPoints: 3, // variable by hunger
+        restPoints: 0,
+        workPoints: 0,
+        onBoat: false
+    },
+    dogStatus: {
+        alive: true,
+        onTeam: false,
+        hunger: 10,
+        actionPoints: 2, // variable by hunger
+    },
+    inventory: {
+        seed: 2,
+        sapling: 2,
+        wood: 0,
+        fish: 0,
+        crop: 0,
+        food: 1
+    },
+};
+
+const initialHistory = {
+    reverseCount: 0,
+    coordinates: [
+        {
+            human: null,
+            dog: null
+        },
+        {
+            human: null,
+            dog: null
+        },
+        {
+            human: null,
+            dog: null
+        }
+    ]
+};
+
+const initialAvailableActions = {
+    human: humanAvailableActions,
+    dog: dogAvailableActions
+};
+
 export const gameSlice = createSlice({
     name: "currentTerrain",
     initialState: {
         gameStatus: null, // true - winning | false - losing | null - in progress
-        terrain: {
-            dimension: mapDimension,
-            map: mockMap,
-            fogMap: unknowns,
-            plantEnergyMap: plantEnergyMap
-        },
-        player: {
-            humanCoordinate: {x: 3, y: 3},
-            dogCoordinate: {x: 5, y: 4},
-            round: 1, // 6 rounds per day
-            trueRound: 1, // only increments
-            switchedToHuman: true,
-            humanStatus: {
-                hunger: 80,
-                sanity: 60,
-                actionPoints: 6, // will be variable by hunger/sanity in the future
-                restPoints: 0,
-                workPoints: 0,
-                onBoat: false
-            },
-            dogStatus: {
-                alive: true,
-                onTeam: false,
-                hunger: 10,
-                actionPoints: 3, // will be variable by hunger in the future
-            },
-            inventory: {
-                seed: 2,
-                sapling: 2,
-                wood: 0,
-                fish: 0,
-                crop: 0,
-                food: 1
-            },
-        },
-        history: {
-            reverseCount: 0,
-            coordinates: [
-                {
-                    human: null,
-                    dog: null
-                },
-                {
-                    human: null,
-                    dog: null
-                },
-                {
-                    human: null,
-                    dog: null
-                }
-            ]
-        },
-        availableActions: {
-            human: humanAvailableActions,
-            dog: dogAvailableActions
-        }
+        terrain: initialTerrain,
+        player: initialPlayer,
+        history: initialHistory,
+        availableActions: initialAvailableActions
     },
     reducers: {
+        resetGame: (state, action) => {
+            state.gameStatus = null;
+            state.terrain = initialTerrain;
+            state.player = initialPlayer;
+            state.history = initialHistory;
+            state.availableActions = initialAvailableActions;
+        },
         determineAvailableActions: (state, action) => {
             availableActions.determineForHuman(state);
             availableActions.determineForDog(state);
@@ -202,7 +217,15 @@ export const gameSlice = createSlice({
 });
 
 export const {
-    determineAvailableActions, forwardTime, reverseTime, switchBetweenHumanAndDog, moveHuman, moveDog, humanAction, dogAction
+    resetGame,
+    determineAvailableActions,
+    forwardTime,
+    reverseTime,
+    switchBetweenHumanAndDog,
+    moveHuman,
+    moveDog,
+    humanAction,
+    dogAction
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
