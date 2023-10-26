@@ -8,6 +8,7 @@ const rabbitMQ = require("../../common-utils/rabbitMQUtils");
 const mongoose = require("mongoose");
 const Log = require("../../db-models/Log");
 const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
+const apiErrorUtils = require("../../common-utils/apiErrorUtils");
 
 let mqClient;
 const connectToRabbitMQ = async () => {
@@ -25,7 +26,6 @@ const connectToRabbitMQ = async () => {
 };
 connectToRabbitMQ();
 
-// todo create util function for inserting activity logs
 const createFromQueueMessage = (message) => {
     const sourceLog = JSON.parse(message.content.toString());
     if (!sourceLog.message) {
@@ -82,10 +82,7 @@ const search = (req, res) => {
             });
         })
         .catch(error => {
-            res.status(500).json({
-                message: "Internal server error - failed to fetch logs",
-                error: error
-            });
+            apiErrorUtils.internalServerError(req, res, error);
         });
 };
 
