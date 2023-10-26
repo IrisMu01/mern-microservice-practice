@@ -1,34 +1,32 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { resetGame } from "../../store/game/gameSlice";
-import Button from "react-bootstrap/Button";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DoubleCheckButton } from "../utils/DoubleCheckButton";
 
 export const ResetGame = () => {
     const dispatch = useDispatch();
-    const [ confirmReset, setConfirmReset ] = useState(null);
-    const doReset = () => {
-        if (confirmReset) {
-            dispatch(resetGame());
-            setConfirmReset(false);
-        } else {
-            setConfirmReset(true)
-        }
-    };
+    
+    const doResetGame = () => {
+        dispatch(resetGame());
+    }
     
     return (
         <div className="mt-2">
-            <Button
-                variant={confirmReset? 'outline-danger' : 'outline-warning'}
-                size="sm"
+            <DoubleCheckButton
+                defaultVariant="outline-warning"
+                confirmedVariant="outline-danger"
                 className="w-100 text-center"
-                onClick={doReset}
-            >
-                <FontAwesomeIcon icon={"refresh"}/>
-                <span className="ms-2">
-                    Restart Game
-                </span>
-            </Button>
+                size="sm"
+                onClickDispatch={doResetGame}
+                content={(
+                    <div>
+                        <FontAwesomeIcon icon={"refresh"}/>
+                        <span className="ms-2">
+                            Restart Game
+                        </span>
+                    </div>
+                )}
+            />
         </div>
     )
 }

@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { determineAvailableActions, humanAction, dogAction } from "../../store/game/gameSlice";
 import { dogActionTypes, humanActionTypes } from "../../utils/constants";
 import { gameUtils } from "../../utils/utils";
-import Button from "react-bootstrap/Button";
 import _ from "lodash";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { DoubleCheckButton } from "../utils/DoubleCheckButton";
 
 export const ActionControl = () => {
     const dispatch = useDispatch();
@@ -28,55 +26,36 @@ export const ActionControl = () => {
         });
     }
     
-    const [ confirmedHumanActionKey, setConfirmedHumanActionKey ] = useState(null);
-    const [ confirmedDogActionKey, setConfirmedDogActionKey ] = useState(null);
     const doAction = (actionKey) => () => {
         if (switchedToHuman) {
-            if (confirmedHumanActionKey === actionKey) {
-                const payload = { actionType: humanActionTypes[actionKey] };
-                if (humanActionTypes[actionKey] === humanActionTypes.fish) {
-                    payload.luckNumber = gameUtils.getRandomInteger(0, 100);
-                } else if (humanActionTypes[actionKey] === humanActionTypes.harvest) {
-                    payload.luckNumber = gameUtils.getRandomInteger(0, 2);
-                } else if (humanActionTypes[actionKey] === humanActionTypes.releaseTreeEnergy) {
-                    payload.luckNumber = gameUtils.getRandomInteger(3, 8);
-                }
-                setConfirmedHumanActionKey(null);
-                dispatch(humanAction(payload));
-            } else {;
-                setConfirmedHumanActionKey(actionKey);
+            const payload = { actionType: humanActionTypes[actionKey] };
+            if (humanActionTypes[actionKey] === humanActionTypes.fish) {
+                payload.luckNumber = gameUtils.getRandomInteger(0, 100);
+            } else if (humanActionTypes[actionKey] === humanActionTypes.harvest) {
+                payload.luckNumber = gameUtils.getRandomInteger(0, 2);
+            } else if (humanActionTypes[actionKey] === humanActionTypes.releaseTreeEnergy) {
+                payload.luckNumber = gameUtils.getRandomInteger(3, 8);
             }
+            dispatch(humanAction(payload));
         } else {
-            if (confirmedDogActionKey === actionKey) {
-                dispatch(dogAction({ actionType: dogActionTypes[actionKey] }));
-                setConfirmedDogActionKey(null);
-            } else {
-                setConfirmedDogActionKey(actionKey);
-            }
+            dispatch(dogAction({ actionType: dogActionTypes[actionKey] }));
         }
     };
-    
-    const isConfirmingAction = (key) => {
-        return key === (switchedToHuman ? confirmedHumanActionKey : confirmedDogActionKey);
-    }
     
     return (
         <div className="d-flex flex-column h-100">
             <div className="mt-auto mb-auto w-100 action-control">
                 {availableActionKeys.map(key => (
                     <div className="me-2 mb-2" key={`action-${key}`}>
-                        <Button
-                            variant={isConfirmingAction(key) ? 'success' : 'secondary'}
+                        <DoubleCheckButton
+                            defaultVariant="secondary"
+                            confirmedVariant="success"
                             size="sm"
-                            onClick={doAction(key)}
-                        >
-                            {humanActionTypes[key]}
-                            {isConfirmingAction(key) && (
-                                <span className="ms-2">
-                                    <FontAwesomeIcon icon={"check"}/>
-                                </span>
+                            onClickDispatch={doAction(key)}
+                            content={(
+                                <span> {humanActionTypes[key]} </span>
                             )}
-                        </Button>
+                        />
                     </div>
                 ))}
             </div>

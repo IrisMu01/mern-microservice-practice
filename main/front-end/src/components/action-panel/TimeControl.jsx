@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { forwardTime, reverseTime }  from "../../store/game/gameSlice";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Button from "react-bootstrap/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {gameUtils} from "../../utils/utils";
+import { DoubleCheckButton } from "../utils/DoubleCheckButton";
 
 export const TimeControl = () => {
     const dispatch = useDispatch();
@@ -13,29 +12,18 @@ export const TimeControl = () => {
     const isNight = round % 6 === 5 || round % 6 === 4;
     
     const doForwardTime = () => {
-        if (forwardTimeConfirmed) {
-            setForwardTimeConfirmed(false);
-            dispatch(forwardTime({
-                lifeNum: gameUtils.getRandomInteger(0, 100),
-                deathNum: gameUtils.getRandomInteger(0, 100)
-            }));
-        } else {
-            setForwardTimeConfirmed(true);
-        }
+        dispatch(forwardTime({
+            lifeNum: gameUtils.getRandomInteger(0, 100),
+            deathNum: gameUtils.getRandomInteger(0, 100)
+        }));
     }
     const doReverseTime = () => {
-        if (reverseTimeConfirmed) {
-            setReverseTimeConfirmed(false);
+        if (canReverseTime) {
             dispatch(reverseTime({
                 lifeNum: gameUtils.getRandomInteger(0, 100)
             }));
-        } else {
-            setReverseTimeConfirmed(true);
         }
     }
-    
-    const [ forwardTimeConfirmed, setForwardTimeConfirmed ] = useState(false);
-    const [ reverseTimeConfirmed, setReverseTimeConfirmed ] = useState(false);
     
     return (
         <div className="time-control">
@@ -50,22 +38,30 @@ export const TimeControl = () => {
                     </span>
                 )}
             </div>
-            <Button
-                onClick={canReverseTime ? doReverseTime : () => {}}
-                variant={canReverseTime ? (reverseTimeConfirmed ? "danger" : "warning") : "secondary"}
+            <DoubleCheckButton
+                defaultVariant="warning"
+                confirmedVariant="danger"
                 size="sm"
-            >
-                <FontAwesomeIcon icon={"backward"}/>
-                <span className="ms-2">Reverse time</span>
-            </Button>
-            <Button
-                onClick={doForwardTime}
-                variant={forwardTimeConfirmed ? "success" : "warning"}
+                onClickDispatch={doReverseTime}
+                content={(
+                    <div>
+                        <FontAwesomeIcon icon={"backward"}/>
+                        <span className="ms-2">Reverse time</span>
+                    </div>
+                )}
+            />
+            <DoubleCheckButton
+                defaultVariant="warning"
+                confirmedVariant="success"
                 size="sm"
-            >
-                <FontAwesomeIcon icon={"forward"}/>
-                <span className="ms-2">Forward time</span>
-            </Button>
+                onClickDispatch={doForwardTime}
+                content={(
+                    <div>
+                        <FontAwesomeIcon icon={"forward"}/>
+                        <span className="ms-2">Forward time</span>
+                    </div>
+                )}
+            />
         </div>
     )
 }
