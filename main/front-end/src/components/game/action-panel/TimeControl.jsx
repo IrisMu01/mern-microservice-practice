@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { forwardTime, reverseTime }  from "../../store/game/gameSlice";
+import { forwardTime, reverseTime }  from "../../../store/game/gameSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {gameUtils} from "../../utils/utils";
-import { DoubleCheckButton } from "../utils/DoubleCheckButton";
+import {gameUtils} from "../../../utils/utils";
+import { DoubleCheckButton } from "../../utils/DoubleCheckButton";
 
 export const TimeControl = () => {
     const dispatch = useDispatch();

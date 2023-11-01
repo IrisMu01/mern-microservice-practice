@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { determineAvailableActions, humanAction, dogAction } from "../../store/game/gameSlice";
-import { dogActionTypes, humanActionTypes } from "../../utils/constants";
-import { gameUtils } from "../../utils/utils";
+import { determineAvailableActions, humanAction, dogAction } from "../../../store/game/gameSlice";
+import { dogActionTypes, humanActionTypes } from "../../../utils/constants";
+import { gameUtils } from "../../../utils/utils";
 import _ from "lodash";
-import { DoubleCheckButton } from "../utils/DoubleCheckButton";
+import { DoubleCheckButton } from "../../utils/DoubleCheckButton";
 
 export const ActionControl = () => {
     const dispatch = useDispatch();

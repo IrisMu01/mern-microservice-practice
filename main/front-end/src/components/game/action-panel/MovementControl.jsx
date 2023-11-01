@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
-import { switchBetweenHumanAndDog, moveHuman, moveDog } from "../../store/game/gameSlice";
+import { switchBetweenHumanAndDog, moveHuman, moveDog } from "../../../store/game/gameSlice";
 
 export const MovementControl = () => {
     const dispatch = useDispatch();

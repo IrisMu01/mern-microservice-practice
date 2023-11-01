@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {resetGame} from "../store/game/gameSlice";
+import {resetGame} from "../../store/game/gameSlice";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 

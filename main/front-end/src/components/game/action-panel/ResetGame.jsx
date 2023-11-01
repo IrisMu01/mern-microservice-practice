@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { resetGame } from "../../store/game/gameSlice";
+import { resetGame } from "../../../store/game/gameSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DoubleCheckButton } from "../utils/DoubleCheckButton";
+import { DoubleCheckButton } from "../../utils/DoubleCheckButton";
 
 export const ResetGame = () => {
     const dispatch = useDispatch();

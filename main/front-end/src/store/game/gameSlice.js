@@ -110,7 +110,7 @@ const initialAvailableActions = {
 };
 
 export const gameSlice = createSlice({
-    name: "currentTerrain",
+    name: "game",
     initialState: {
         gameStatus: null, // true - winning | false - losing | null - in progress
         terrain: initialTerrain,
