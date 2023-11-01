@@ -1,8 +1,8 @@
 import './style/App.scss';
 import {loadIcons} from "./fontAwesome";
-import {MapContainer} from "./components/map/MapContainer";
-import {ActionPanel} from "./components/action-panel/ActionPanel";
-import {WinLoseModal} from "./components/WinLoseModal";
+import {MapContainer} from "./components/game/map/MapContainer";
+import {ActionPanel} from "./components/game/action-panel/ActionPanel";
+import {WinLoseModal} from "./components/game/WinLoseModal";
 
 loadIcons();
 
