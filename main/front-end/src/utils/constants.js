@@ -34,3 +34,16 @@ export const dogActionTypes = {
     explore: "Explore",
     cleanWilt: "Clean up wilt"
 };
+
+export const notificationTypes = {
+    error: "error",
+    message: "message"
+};
+
+export const modalTypes = {
+    signIn: "SIGN_IN",
+    register: "REGISTER",
+    currentUser: "CURRENT_USER",
+    changePassword: "CHANGE_PASSWORD",
+    deleteAccount: "DELETE_ACCOUNT"
+};

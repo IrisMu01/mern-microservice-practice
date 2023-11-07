@@ -11,7 +11,7 @@ function App() {
     return (
         <div className="App">
             {/* overlays */}
-            {/*<NotificationList/>*/}
+            <NotificationList/>
             {/*<Modals/>*/}
             {/* the page */}
             <Navigation/>

@@ -164,7 +164,6 @@ $movement-icon-size: 25 * 1px;
 
 .game {
   padding-top: 50px;
-  height: 2000px;
 }
 
 .human-status, .dog-status {
@@ -258,6 +257,25 @@ $movement-icon-size: 25 * 1px;
 
     &.hidden {
       opacity: 0.4;
+    }
+  }
+}
+
+.notification-list {
+  position: absolute;
+  width: 100%;
+  padding: 70px 25%;
+  z-index: 50;
+  max-height: 100vh;
+  overflow-y: clip;
+
+  /* bootstrap override */
+  .alert {
+    font-size: 18px;
+    padding: 10px 40px 10px 15px;
+
+    .btn-close {
+      padding: 15px;
     }
   }
 }
