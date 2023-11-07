@@ -1,19 +1,21 @@
 import './style/App.scss';
 import {loadIcons} from "./fontAwesome";
-import {MapContainer} from "./components/game/map/MapContainer";
-import {ActionPanel} from "./components/game/action-panel/ActionPanel";
-import {WinLoseModal} from "./components/game/WinLoseModal";
+import {NotificationList} from "./components/notification/NotificationList";
+import {Game} from "./components/game/Game";
+import {Navigation} from "./components/Navigation";
+import {Modals} from "./components/modals/Modals";
 
 loadIcons();
 
 function App() {
     return (
         <div className="App">
-            <WinLoseModal/>
-            <div className="d-flex mx-0">
-                <ActionPanel/>
-                <MapContainer/>
-            </div>
+            {/* overlays */}
+            {/*<NotificationList/>*/}
+            {/*<Modals/>*/}
+            {/* the page */}
+            <Navigation/>
+            <Game/>
         </div>
     );
 }
