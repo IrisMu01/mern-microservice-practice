@@ -19,8 +19,9 @@ const registerUser = async (req, res) => {
     }
     
     sourceUser.password = authUtils.encrypt(sourceUser.password);
-    sourceUser.verificationKey = authUtils.generateRandomString(12);
-    sourceUser.lockedReason = "Unverified";
+    // verifications are disabled for now because it's pointless to require this for an account with only game saves
+    //sourceUser.verificationKey = authUtils.generateRandomString(12);
+    //sourceUser.lockedReason = "Unverified";
     User.create(sourceUser)
         .then(user => {
             loggingUtils.createUserLog(req, user.id, `User @${user.username} has been created`);

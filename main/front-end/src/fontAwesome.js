@@ -26,7 +26,8 @@ import {
     faTree,
     faUser,
     faWater,
-    faWheatAwn
+    faWheatAwn,
+    faX
 } from '@fortawesome/free-solid-svg-icons';
 
 export const loadIcons = () => {
@@ -57,6 +58,7 @@ export const loadIcons = () => {
         faTree,
         faUser,
         faWater,
-        faWheatAwn
+        faWheatAwn,
+        faX
     );
 };

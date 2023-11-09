@@ -16,7 +16,10 @@ const login = async (req, res) => {
     req.session.userId = user.id;
     
     loggingUtils.createUserLog(req, user.id, `User @${user.username} has logged in`);
-    res.status(200).json({ message: "You have logged in" });
+    res.status(200).json({
+        message: "You have logged in",
+        user: _.pick(user, ["username", "email"])
+    });
 };
 
 const logout = async (req, res) => {

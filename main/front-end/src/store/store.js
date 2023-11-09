@@ -7,8 +7,8 @@ import modalReducer from "./modal/modalSlice";
 export default configureStore({
     reducer: {
         game: gameReducer,
-        //auth: authReducer,
+        auth: authReducer,
         notification: notificationReducer,
-        //modal: modalReducer
+        modal: modalReducer
     }
 });

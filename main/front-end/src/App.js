@@ -12,7 +12,7 @@ function App() {
         <div className="App">
             {/* overlays */}
             <NotificationList/>
-            {/*<Modals/>*/}
+            <Modals/>
             {/* the page */}
             <Navigation/>
             <Game/>

@@ -28,6 +28,10 @@ $movement-icon-size: 25 * 1px;
   @extend .full-screen-overlay;
 }
 
+.bg-navbar {
+  background-color: #627a64;
+}
+
 .cell {
   width: $cell-icon-size * 1.6;
   height: $cell-icon-size * 1.6;
@@ -150,6 +154,74 @@ $movement-icon-size: 25 * 1px;
       }
     }
   }
+}
+
+.custom-modal {
+  @extend .full-screen-overlay;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modal-box {
+    min-width: 350px;
+    height: fit-content;
+    max-height: 80vh;
+    padding: 15px;
+    background-color: #eee;
+    color: #333;
+    border-radius: 15px;
+
+    .modal-title {
+      font-size: 24px;
+      padding-top: 15px;
+      border-bottom: 1px solid #b9b9b9;
+      margin: 0 15px 15px 10px;
+      display: flex;
+      align-items: baseline;
+
+      .close-icon {
+        margin-left: auto;
+        font-size: 15px;
+        color: #8a8a8a;
+
+        :hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .modal-content {
+      padding: 15px;
+    }
+
+    .modal-footer {
+      padding-bottom: 15px;
+      border-top: 1px solid #8a8a8a;
+      margin: 15px 15px 0 15px;
+    }
+  }
+
+  &.sm {
+    .modal-box {
+      width: 30%;
+    }
+  }
+
+  &.md {
+    .modal-box {
+      width: 50%;
+    }
+  }
+
+  &.lg {
+    .modal-box {
+      width: 75%;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
 }
 
 .full-screen-overlay {
@@ -278,10 +350,6 @@ $movement-icon-size: 25 * 1px;
       padding: 15px;
     }
   }
-}
-
-.bg-navbar {
-  background-color: #627a64;
 }
 
 .time-control {
