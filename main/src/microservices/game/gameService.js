@@ -9,12 +9,14 @@ const apiErrorUtils = require("../../common-utils/apiErrorUtils");
 const saveGame = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
     const sourceGame = _.cloneDeep(req.body);
     if (!sourceGame.gameState) {
         apiErrorUtils.badRequest(res, "No game state provided");
+        return;
     }
     sourceGame.created = new Date();
     sourceGame.user = user._id;
@@ -38,6 +40,7 @@ const saveGame = async (req, res) => {
 const findAllForCurrentUser = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     
     const findQuery = {
@@ -60,14 +63,17 @@ const findAllForCurrentUser = async (req, res) => {
 const loadGame = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     } else if (!req.gameId) {
         apiErrorUtils.badRequest(res, "No game save ID provided");
+        return;
     }
     
     const game = await Game.findById(new mongoose.Types.ObjectId(req.gameId)).then(game => game);
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
     if (game.user !== user._id) {
         apiErrorUtils.badRequest("You cannot access someone else's game file");
+        return;
     }
     
     loggingUtils.createUserLog(req, user._id, `User @${user.username} loaded their game file created on ${game.created}`);
@@ -80,14 +86,17 @@ const loadGame = async (req, res) => {
 const deleteGame = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     } else if (!req.gameId) {
         apiErrorUtils.badRequest(res, "No game save ID provided for deletion");
+        return;
     }
     
     const game = await Game.findById(new mongoose.Types.ObjectId(req.gameId)).then(game => game);
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
     if (game.user !== user._id) {
         apiErrorUtils.badRequest("You cannot delete someone else's game file");
+        return;
     }
     
     await Game.deleteOne({_id: game._id})

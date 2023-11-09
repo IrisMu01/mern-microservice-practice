@@ -8,10 +8,12 @@ const apiErrorUtils = require('../../common-utils/apiErrorUtils');
 const login = async (req, res) => {
     if (!req.body.username || !req.body.password) {
         apiErrorUtils.badRequest(res, "Username or password cannot be empty");
+        return;
     }
     const user = await User.findOne({username: req.body.username});
     if (!user || !authUtils.compare(req.body.password, user.password) || user.lockedReason) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     req.session.userId = user.id;
     
@@ -23,8 +25,10 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
-    loggingUtils.createUserLog(req, user.id, `User @${user.username} has logged out`);
+    if (req.session.userId) {
+        const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
+        loggingUtils.createUserLog(req, user.id, `User @${user.username} has logged out`);
+    }
     req.session.destroy();
     res.status(204).send();
 }

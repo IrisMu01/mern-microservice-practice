@@ -28,7 +28,10 @@ const launch = async (params) => {
     
     try {
         const app = express();
-        app.use(cors());
+        app.use(cors({
+            origin: `http://localhost:3000`,
+            credentials: true
+        }));
         app.use(bodyParser.json());
     
         const useDb = params.useDb || true;

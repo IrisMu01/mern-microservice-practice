@@ -6,6 +6,7 @@ import {CurrentUserModal} from "./_modals/CurrentUserModal";
 import {ChangePasswordModal} from "./_modals/ChangePasswordModal";
 import {DeleteAccountModal} from "./_modals/DeleteAccountModal";
 
+// todo a case-sensitive font family should be used for the account-related functionalities
 export const Modals = () => {
     const openModals = useSelector(state => state.modal.priorities);
     

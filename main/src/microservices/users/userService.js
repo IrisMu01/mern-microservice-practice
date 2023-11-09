@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
             loggingUtils.createUserLog(req, user.id, `User @${user.username} has been created`);
             res.json({
                 id: user._id,
-                message: `User @${user.username} registered successfully`,
+                username: user.username,
                 verificationKey: user.verificationKey
             });
         })
@@ -47,6 +47,7 @@ const verifyUser = async (req, res) => {
         return;
     } else if (_.isEmpty(user.verificationKey)) {
         apiErrorUtils.badRequest(res, "User does not need to be verified");
+        return;
     } else if (req.body.verificationKey !== user.verificationKey) {
         apiErrorUtils.badRequest(res, "Verification key does not match");
         return;
@@ -71,6 +72,7 @@ const verifyUser = async (req, res) => {
 const getCurrentUser = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     const fieldsToOmit = {
         password: 0,
@@ -93,6 +95,7 @@ const getCurrentUser = async (req, res) => {
 const deleteCurrentUser = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
@@ -116,15 +119,19 @@ const deleteCurrentUser = async (req, res) => {
 const changePassword = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
+        return;
     }
     
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId));
     if (!user) {
         apiErrorUtils.badRequest(`No user with id ${req.session.userId}`);
+        return;
     } else if (!authUtils.compare(req.body.oldPassword, user.password)) {
         apiErrorUtils.badRequest("Incorrect old password");
+        return;
     } else if (!req.body.newPassword) {
         apiErrorUtils.badRequest("New password not provided");
+        return;
     }
     
     User.findByIdAndUpdate(user._id, {password: authUtils.encrypt(req.body.newPassword)}).then(updatedUser => {

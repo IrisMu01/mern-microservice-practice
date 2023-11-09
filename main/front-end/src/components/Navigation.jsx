@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store/auth/authThunks";
 import { openModal } from "../store/modal/modalSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "react-bootstrap/Navbar";
@@ -12,7 +13,7 @@ export const Navigation = () => {
     const dispatch = useDispatch();
     
     const doSignOut = () => {
-        console.log("sign out");
+        dispatch(logout());
     }
     
     const openSignInModal = () => {
@@ -32,7 +33,7 @@ export const Navigation = () => {
                         {currentUser ? (
                             <NavLink>
                                 <Navbar.Text className="d-flex align-items-center">
-                                    @username
+                                    {`@${currentUser.username}`}
                                     <FontAwesomeIcon icon={"sign-out"} className="ms-2" onClick={doSignOut}/>
                                 </Navbar.Text>
                             </NavLink>

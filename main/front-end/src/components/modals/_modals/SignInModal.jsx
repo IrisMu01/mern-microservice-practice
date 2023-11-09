@@ -1,5 +1,7 @@
-import {useDispatch, useSelector} from "react-redux";
+import {useState} from "react";
+import {useDispatch} from "react-redux";
 import {closeModal, openModal} from "../../../store/modal/modalSlice";
+import {login} from "../../../store/auth/authThunks";
 import {modalTypes} from "../../../utils/constants";
 import Modal from "../../utils/Modal";
 import Form from "react-bootstrap/Form";
@@ -12,16 +14,23 @@ import Col from "react-bootstrap/Col";
 //  - register form validation
 //  - finish other modals
 export const SignInModal = () => {
+    const [username, setUsername] = useState(null);
+    const [password, setPassword] = useState(null);
     const dispatch = useDispatch();
+    
     const doClose = () => {
         dispatch(closeModal());
-    }
+    };
     
     const openRegisterModal = () => {
         dispatch(openModal({
             type: modalTypes.register,
             data: null
         }));
+    };
+    
+    const doSignIn = () => {
+        dispatch(login({username: username, password: password}));
     };
     
     return (
@@ -34,7 +43,10 @@ export const SignInModal = () => {
                             <Form.Label>Username</Form.Label>
                         </Col>
                         <Col sm="9">
-                            <Form.Control type="text" required />
+                            <Form.Control
+                                type="text" required
+                                onChange={event => setUsername(event.target.value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group controlId="signInPassword" as={Row} className="form-group">
@@ -42,13 +54,22 @@ export const SignInModal = () => {
                             <Form.Label>Password</Form.Label>
                         </Col>
                         <Col sm="9">
-                            <Form.Control type="password" required />
+                            <Form.Control
+                                type="password" required
+                                onChange={event => setPassword(event.target.value)}
+                            />
                         </Col>
                     </Form.Group>
                     
-                    <Button className="px-0" variant="link" onClick={openRegisterModal}>
-                        Create An Account
-                    </Button>
+                    <div className="d-flex">
+                        <Button variant="success" onClick={doSignIn}>
+                            Sign In
+                        </Button>
+                        <Button className="px-0 ms-auto" variant="link" onClick={openRegisterModal}>
+                            Create An Account
+                        </Button>
+                    </div>
+                
                 </Form>
             </Modal.Content>
         </Modal>

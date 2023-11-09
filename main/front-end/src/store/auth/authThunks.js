@@ -1,15 +1,18 @@
 import axios from "axios";
 import {setCurrentUser} from "./authSlice";
 import {addError, addMessage} from "../notification/notificationSlice";
+import {closeModal} from "../modal/modalSlice";
 
 const authServiceClient = axios.create({
     baseURL: "http://localhost:4000/api/auth",
-    timeout: 30000
+    timeout: 30000,
+    withCredentials: true
 });
 
 const userServiceClient = axios.create({
     baseURL: "http://localhost:4001/api/users",
-    timeout: 30000
+    timeout: 30000,
+    withCredentials: true
 });
 
 export const login = credentials => dispatch => {
@@ -18,44 +21,45 @@ export const login = credentials => dispatch => {
             password: credentials.password
         })
         .then(response => {
-            console.log(response);
-            dispatch(setCurrentUser({
-                payload: response.user
-            }));
+            dispatch(setCurrentUser(response.data.user));
+            dispatch(closeModal());
         })
         .catch(error => {
-            console.log(error);
-            dispatch(addError({
-                payload: error.message || error
-            }));
+            console.error(error);
+            dispatch(addError(error.message || error));
         });
 };
 
 export const logout = () => dispatch => {
     authServiceClient.get("/logout")
         .then(response => {
-            console.log(response);
-            dispatch(setCurrentUser({
-                payload: null
-            }));
+            dispatch(setCurrentUser(null));
+            dispatch(addMessage("You have logged out"));
         })
         .catch(error => {
-            console.log(error);
-            dispatch(addError({
-                payload: error.message || error
-            }));
+            console.error(error);
+            dispatch(addError(error.message || error));
+        });
+};
+
+export const getCurrentUser = () => dispatch => {
+    userServiceClient.get("/my-profile")
+        .then(response => {
+            dispatch(setCurrentUser(response.data.user));
+        })
+        .catch(error => {
+            // no-op
         });
 };
 
 export const register = user => dispatch => {
     userServiceClient.post("/register", user)
         .then(response => {
-            console.log(response.verificationKey); // todo change behaviour later
+            dispatch(addMessage(`Account @${response.data.username} has been created`));
+            dispatch(closeModal());
         })
         .catch(error => {
-            dispatch(addError({
-                payload: error.message || error
-            }));
+            dispatch(addError(error.message || error));
         });
 };
 
@@ -64,14 +68,11 @@ export const deleteAccount = password => dispatch => {
             password: password
         })
         .then(response => {
-            dispatch(setCurrentUser({
-                payload: null
-            }));
+            dispatch(addMessage("Your account has been deleted"));
+            dispatch(setCurrentUser(null));
         })
         .catch(error => {
-            dispatch(addError({
-                payload: error.message || error
-            }));
+            dispatch(addError(error.message || error));
         });
 };
 
@@ -81,13 +82,9 @@ export const changePassword = (oldPassword, newPassword) => dispatch => {
             newPassword: newPassword
         })
         .then(response => {
-            dispatch(addMessage({
-                payload: "Password changed successfully"
-            }));
+            dispatch(addMessage("Password changed successfully"));
         })
         .catch(error => {
-            dispatch(addError({
-                payload: error.message || error
-            }))
+            dispatch(addError(error.message || error));
         });
 };
