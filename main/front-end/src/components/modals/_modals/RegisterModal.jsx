@@ -22,7 +22,7 @@ export const RegisterModal = () => {
     const doRegister = () => {
         if (password !== confirmPassword) {
             // todo add proper form validation - addError should be reserved for errors coming from the backend
-            dispatch(addError("The password and confirm password do not match"));
+            dispatch(addError("The password and confirmed password do not match"));
         } else {
             dispatch(register({
                 username: username,

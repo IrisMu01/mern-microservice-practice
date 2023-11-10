@@ -26,7 +26,7 @@ export const login = credentials => dispatch => {
         })
         .catch(error => {
             console.error(error);
-            dispatch(addError(error.message || error));
+            dispatch(addError(error?.response?.data?.message || error));
         });
 };
 
@@ -38,7 +38,7 @@ export const logout = () => dispatch => {
         })
         .catch(error => {
             console.error(error);
-            dispatch(addError(error.message || error));
+            dispatch(addError(error?.response?.data?.message || error));
         });
 };
 
@@ -59,25 +59,26 @@ export const register = user => dispatch => {
             dispatch(closeModal());
         })
         .catch(error => {
-            dispatch(addError(error.message || error));
+            dispatch(addError(error?.response?.data?.message || error));
         });
 };
 
 export const deleteAccount = password => dispatch => {
-    userServiceClient.post("/delete-my-account", {
+    userServiceClient.put("/delete-my-account", {
             password: password
         })
         .then(response => {
+            dispatch(closeModal());
             dispatch(addMessage("Your account has been deleted"));
             dispatch(setCurrentUser(null));
         })
         .catch(error => {
-            dispatch(addError(error.message || error));
+            dispatch(addError(error?.response?.data?.message || error));
         });
 };
 
-export const changePassword = (oldPassword, newPassword) => dispatch => {
-    userServiceClient.post("/register", {
+export const changePassword = ({oldPassword, newPassword}) => dispatch => {
+    userServiceClient.put("/change-password", {
             oldPassword: oldPassword,
             newPassword: newPassword
         })
@@ -85,6 +86,6 @@ export const changePassword = (oldPassword, newPassword) => dispatch => {
             dispatch(addMessage("Password changed successfully"));
         })
         .catch(error => {
-            dispatch(addError(error.message || error));
+            dispatch(addError(error?.response?.data?.message || error));
         });
 };

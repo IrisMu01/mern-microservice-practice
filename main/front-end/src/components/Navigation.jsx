@@ -23,21 +23,35 @@ export const Navigation = () => {
         }));
     };
     
+    const openCurrentUserModal = () => {
+        dispatch(openModal({
+            type: modalTypes.currentUser,
+            data: null
+        }));
+    };
+    
     return (
         <Navbar expand="sm" data-bs-theme="dark" bg="navbar" sticky="top">
             <Container>
                 <Navbar.Brand>Game Title</Navbar.Brand>
                 <Navbar.Toggle aria-controls="page-navbar" />
                 <Navbar.Collapse id="page-navbar" className="justify-content-end">
-                    <Nav>
-                        {currentUser ? (
-                            <NavLink>
+                    <Nav className="d-flex align-items-center">
+                        {currentUser && (
+                            <NavLink onClick={openCurrentUserModal}>
                                 <Navbar.Text className="d-flex align-items-center">
                                     {`@${currentUser.username}`}
+                                </Navbar.Text>
+                            </NavLink>
+                        )}
+                        {currentUser && (
+                            <NavLink>
+                                <Navbar.Text>
                                     <FontAwesomeIcon icon={"sign-out"} className="ms-2" onClick={doSignOut}/>
                                 </Navbar.Text>
                             </NavLink>
-                        ) : (
+                        )}
+                        {!currentUser && (
                             <NavLink>
                                 <Navbar.Text onClick={openSignInModal}>Sign In/Sign Up</Navbar.Text>
                             </NavLink>

@@ -100,11 +100,11 @@ const deleteCurrentUser = async (req, res) => {
     
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
     if (_.isEmpty(user)) {
-        apiErrorUtils.badRequest("No user found");
+        apiErrorUtils.badRequest(res, "No user found");
         return;
     }
     if (!authUtils.compare(req.body.password, user.password)) {
-        apiErrorUtils.badRequest("Incorrect password to delete user");
+        apiErrorUtils.badRequest(res, "Incorrect password to delete user");
         return;
     }
     await User.deleteOne({_id: user.id})
@@ -124,13 +124,13 @@ const changePassword = async (req, res) => {
     
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId));
     if (!user) {
-        apiErrorUtils.badRequest(`No user with id ${req.session.userId}`);
+        apiErrorUtils.badRequest(res, `No user with id ${req.session.userId}`);
         return;
     } else if (!authUtils.compare(req.body.oldPassword, user.password)) {
-        apiErrorUtils.badRequest("Incorrect old password");
+        apiErrorUtils.badRequest(res, "Incorrect old password");
         return;
     } else if (!req.body.newPassword) {
-        apiErrorUtils.badRequest("New password not provided");
+        apiErrorUtils.badRequest(res, "New password not provided");
         return;
     }
     

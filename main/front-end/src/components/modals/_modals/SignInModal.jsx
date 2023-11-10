@@ -10,7 +10,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 // todo
-//  - use thunk to connect to Auth/UserService
 //  - register form validation
 //  - finish other modals
 export const SignInModal = () => {

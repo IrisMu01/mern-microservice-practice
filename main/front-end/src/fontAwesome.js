@@ -12,6 +12,7 @@ import {
     faCubesStacked,
     faDog,
     faDrumstickBite,
+    faEnvelope,
     faFish,
     faForward,
     faHouse,
@@ -25,6 +26,7 @@ import {
     faSkull,
     faTree,
     faUser,
+    faUserCircle,
     faWater,
     faWheatAwn,
     faX
@@ -44,6 +46,7 @@ export const loadIcons = () => {
         faCubesStacked,
         faDog,
         faDrumstickBite,
+        faEnvelope,
         faFish,
         faForward,
         faHouse,
@@ -57,6 +60,7 @@ export const loadIcons = () => {
         faSkull,
         faTree,
         faUser,
+        faUserCircle,
         faWater,
         faWheatAwn,
         faX

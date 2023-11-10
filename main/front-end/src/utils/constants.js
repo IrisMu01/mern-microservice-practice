@@ -43,7 +43,5 @@ export const notificationTypes = {
 export const modalTypes = {
     signIn: "SIGN_IN",
     register: "REGISTER",
-    currentUser: "CURRENT_USER",
-    changePassword: "CHANGE_PASSWORD",
-    deleteAccount: "DELETE_ACCOUNT"
+    currentUser: "CURRENT_USER"
 };

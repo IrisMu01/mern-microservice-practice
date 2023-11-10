@@ -156,6 +156,29 @@ $movement-icon-size: 25 * 1px;
   }
 }
 
+.current-user {
+  font-size: 16px;
+  margin-top: -15px;
+
+  /* bootstrap overrides */
+  .nav-pills .nav-link {
+    color: #313131;
+
+    &.delete-account {
+      color: #f30000;
+    }
+
+    &.active {
+      color: #ffffff;
+      background-color: #627a64;
+
+      &.delete-account {
+        background-color: #cc3838;
+      }
+    }
+  }
+}
+
 .custom-modal {
   @extend .full-screen-overlay;
   display: flex;
@@ -336,7 +359,7 @@ $movement-icon-size: 25 * 1px;
 .notification-list {
   position: absolute;
   width: 100%;
-  padding: 70px 25%;
+  padding: 100px 25%;
   z-index: 200;
   max-height: 100vh;
   overflow-y: clip;

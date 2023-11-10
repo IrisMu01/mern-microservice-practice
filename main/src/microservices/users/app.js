@@ -9,9 +9,9 @@ router.put('/verify', userService.verifyUser);
 
 router.get('/my-profile', userService.getCurrentUser);
 
-router.delete('/delete-my-account', userService.deleteCurrentUser);
+router.put('/delete-my-account', userService.deleteCurrentUser);
 
-router.put("/:id/change-password", userService.changePassword);
+router.put("/change-password", userService.changePassword);
 
 appStarter.launch({
     name: "UserService",
