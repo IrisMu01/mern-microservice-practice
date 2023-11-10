@@ -11,11 +11,23 @@ export const Modals = () => {
     const IndividualModal = (type) => {
         switch (type) {
             case (modalTypes.register):
-                return (<RegisterModal/>);
+                return (
+                    <div key={type}>
+                        <RegisterModal/>
+                    </div>
+                );
             case (modalTypes.signIn):
-                return (<SignInModal/>);
+                return (
+                    <div key={type}>
+                        <SignInModal/>
+                    </div>
+                );
             case (modalTypes.currentUser):
-                return (<CurrentUserModal/>);
+                return (
+                    <div key={type}>
+                        <CurrentUserModal/>
+                    </div>
+                );
             default:
                 return (<div></div>);
         }
