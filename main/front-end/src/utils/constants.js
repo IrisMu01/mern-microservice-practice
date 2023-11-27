@@ -43,5 +43,6 @@ export const notificationTypes = {
 export const modalTypes = {
     signIn: "SIGN_IN",
     register: "REGISTER",
-    currentUser: "CURRENT_USER"
+    currentUser: "CURRENT_USER",
+    gameFiles: "GAME_FILES"
 };

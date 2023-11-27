@@ -126,6 +126,14 @@ export const gameSlice = createSlice({
             state.history = initialHistory;
             state.availableActions = initialAvailableActions;
         },
+        loadGameFile: (state, action) => {
+            const game = action.payload;
+            state.terrain = game.terrain;
+            state.player = game.player;
+            state.history = game.history;
+            state.availableActions = game.availableActions;
+            state.gameStatus = game.gameStatus;
+        },
         determineAvailableActions: (state, action) => {
             availableActions.determineForHuman(state);
             availableActions.determineForDog(state);
@@ -218,6 +226,7 @@ export const gameSlice = createSlice({
 
 export const {
     resetGame,
+    loadGameFile,
     determineAvailableActions,
     forwardTime,
     reverseTime,

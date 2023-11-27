@@ -1,4 +1,4 @@
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import Modal from "../../utils/Modal";
 import {closeModal} from "../../../store/modal/modalSlice";
 import {modalTypes} from "../../../utils/constants";

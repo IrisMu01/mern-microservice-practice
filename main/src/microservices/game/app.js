@@ -5,7 +5,7 @@ const gameService = require('./gameService');
 
 router.post('/save', gameService.saveGame);
 
-router.get('/:id/all', gameService.findAllForCurrentUser);
+router.get('/all', gameService.findAllForCurrentUser);
 
 router.get('/:id/load', gameService.loadGame);
 
