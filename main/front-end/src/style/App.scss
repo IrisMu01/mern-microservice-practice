@@ -261,6 +261,24 @@ $movement-icon-size: 25 * 1px;
   padding-top: 50px;
 }
 
+.game-file {
+  min-width: 150px !important;
+  text-align: center;
+  margin-right: 15px;
+
+  &.add-save {
+    &:hover {
+      cursor: pointer;
+      background-color: #aaaaaa;
+    }
+  }
+}
+
+.game-file-container {
+  padding-bottom: 20px;
+  overflow-x: auto;
+}
+
 .human-status, .dog-status {
   display: flex;
   margin-bottom: 15px;

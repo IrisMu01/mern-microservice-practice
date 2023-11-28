@@ -1,4 +1,4 @@
-import {ResetGame} from "./ResetGame";
+import {GameFileControl} from "./GameFileControl";
 import {HumanStatus} from "./HumanStatus";
 import {DogStatus} from "./DogStatus";
 import {Inventory} from "./Inventory";
@@ -22,7 +22,7 @@ export const ActionPanel = () => {
             </div>
             <TimeControl/>
             <hr></hr>
-            <ResetGame/>
+            <GameFileControl/>
         </div>
     )
 }

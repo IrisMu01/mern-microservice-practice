@@ -3,6 +3,7 @@ import {modalTypes} from "../../utils/constants";
 import {RegisterModal} from "./_modals/RegisterModal";
 import {SignInModal} from "./_modals/SignInModal";
 import {CurrentUserModal} from "./_modals/CurrentUserModal";
+import {GameFileModal} from "./_modals/GameFileModal";
 
 // todo a case-sensitive font family should be used for the account-related functionalities
 export const Modals = () => {
@@ -12,21 +13,19 @@ export const Modals = () => {
         switch (type) {
             case (modalTypes.register):
                 return (
-                    <div key={type}>
-                        <RegisterModal/>
-                    </div>
+                    <RegisterModal/>
                 );
             case (modalTypes.signIn):
                 return (
-                    <div key={type}>
-                        <SignInModal/>
-                    </div>
+                    <SignInModal/>
                 );
             case (modalTypes.currentUser):
                 return (
-                    <div key={type}>
-                        <CurrentUserModal/>
-                    </div>
+                    <CurrentUserModal/>
+                );
+            case (modalTypes.gameFiles):
+                return (
+                    <GameFileModal/>
                 );
             default:
                 return (<div></div>);
@@ -35,7 +34,11 @@ export const Modals = () => {
     
     return (
         <div>
-            {openModals.map((modalType, i) => IndividualModal(modalType))}
+            {openModals.map((modalType, i) => (
+                <div key={modalType}>
+                    {IndividualModal(modalType)}
+                </div>
+            ))}
         </div>
     )
 }

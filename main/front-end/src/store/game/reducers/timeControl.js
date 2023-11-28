@@ -54,7 +54,7 @@ export const timeControl = {
         // determine next round's available action amount for human & dog: should be variable in the future
         state.player.humanStatus.restPoints = 0;
         state.player.humanStatus.workPoints = 0;
-        state.player.humanStatus.actionPoints = state.player.humanStatus.hunger < 50 ? 2 : 3;
+        state.player.humanStatus.actionPoints = state.player.humanStatus.hunger < 50 ? 4 : 5;
         state.player.dogStatus.actionPoints = state.player.dogStatus.hunger < 50 ? 1 : 2;
     
         // ============= history =============

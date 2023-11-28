@@ -11,7 +11,7 @@ export const saveSlice = createSlice({
         },
         addSave: (state, action) => {
             const save = action.payload;
-            state.gameSaves[save.id] = save;
+            state.gameSaves[save._id] = save;
         },
         removeSave: (state, action) => {
             delete state.gameSaves[action.payload];

@@ -20,7 +20,7 @@ export const save = gameState => dispatch => {
         });
 };
 
-export const findAllForCurrentUser = () => dispatch => {
+export const findAllSavesForCurrentUser = () => dispatch => {
     gameServiceClient.get("/all")
         .then(response => {
             dispatch(loadSaves(response.data.results));

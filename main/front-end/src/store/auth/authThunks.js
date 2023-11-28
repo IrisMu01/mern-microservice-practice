@@ -22,6 +22,7 @@ export const login = credentials => dispatch => {
         })
         .then(response => {
             dispatch(setCurrentUser(response.data.user));
+            dispatch(addMessage("You have logged in"));
             dispatch(closeModal());
         })
         .catch(error => {

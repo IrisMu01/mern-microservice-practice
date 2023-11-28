@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -7,12 +6,9 @@ const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 const mongoose = require('mongoose');
 const _ = require('lodash');
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../.env')});
 
-/**
- * TODO
- *  - migrate logs router to LogService
- *  - connect AuthService, UserService, and LogService for user/error logs
- * */
 const launch = async (params) => {
     if (_.isEmpty(params)) {
         throw new Error("The params must be defined before starting a microservice");

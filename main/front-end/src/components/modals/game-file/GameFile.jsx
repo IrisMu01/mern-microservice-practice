@@ -1,4 +1,5 @@
 import {useSelector, useDispatch} from "react-redux";
+import {loadGame, deleteGame} from "../../../store/save/saveThunk";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {DoubleCheckButton} from "../../utils/DoubleCheckButton";
@@ -6,11 +7,17 @@ import {DoubleCheckButton} from "../../utils/DoubleCheckButton";
 export const GameFile = ({id}) => {
     const gameFile = useSelector(state => state.save.gameSaves[id]);
     const dispatch = useDispatch();
+
+    // todo: doLoad
+
+    const doDelete = () => {
+        dispatch(deleteGame(id));
+    }
     
     return (
-        <Card>
+        <Card className="game-file">
             <Card.Body>
-                <Card.Title>{gameFile.created}</Card.Title>
+                <Card.Title>{new Date(gameFile.created).toLocaleString()}</Card.Title>
                 <DoubleCheckButton
                     defaultVariant="outline-success"
                     confirmedVariant="success"
@@ -21,6 +28,7 @@ export const GameFile = ({id}) => {
                 <DoubleCheckButton
                     defaultVariant="outline-danger"
                     confirmedVariant="danger"
+                    className="ms-2"
                     size="sm"
                     content={<span>Delete</span>}
                     onClickDispatch={console.log("delete")}

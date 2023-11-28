@@ -65,7 +65,7 @@ const initialPlayer = {
     humanStatus: {
         hunger: 80,
         sanity: 60,
-        actionPoints: 3, // variable by hunger
+        actionPoints: 5, // variable by hunger
         restPoints: 0,
         workPoints: 0,
         onBoat: false
