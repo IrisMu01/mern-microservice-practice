@@ -262,7 +262,7 @@ $movement-icon-size: 25 * 1px;
 }
 
 .game-file {
-  min-width: 150px !important;
+  flex-basis: 150px;
   text-align: center;
   margin-right: 15px;
 

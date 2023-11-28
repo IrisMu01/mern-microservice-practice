@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from "react-redux";
 import {closeModal} from "../../../store/modal/modalSlice";
-import {findAllForCurrentUser, save} from "../../../store/save/saveThunk";
+import {save} from "../../../store/save/saveThunk";
 import {modalTypes} from "../../../utils/constants";
 import Modal from "../../utils/Modal";
 import _ from "lodash";
@@ -9,8 +9,8 @@ import Card from "react-bootstrap/Card";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const GameFileModal = () => {
-    const gameFiles = useSelector(state => state.save.gameSaves);
-    console.log(gameFiles);
+    const gameFileIds = useSelector(state => state.save.results);
+    console.log(gameFileIds);
     const gameState = useSelector(state => state.game);
     const currentUser = useSelector(state => state.auth.currentUser);
     const dispatch = useDispatch();
@@ -41,9 +41,9 @@ export const GameFileModal = () => {
                                 </div>
                             </Card.Body>
                         </Card>
-                        {!_.isEmpty(gameFiles) && (
-                            Object.keys(gameFiles).map((id, i) => (
-                                <GameFile id={id}/>
+                        {!_.isEmpty(gameFileIds) && (
+                            gameFileIds.map((id, i) => (
+                                <GameFile key={id} id={id}/>
                             ))
                         )}
                     </div>

@@ -52,7 +52,8 @@ const findAllForCurrentUser = async (req, res) => {
         .then(games => {
             res.json({
                 query: req.query,
-                results: games
+                results: _.map(games, game => game._id),
+                gameSaves: _.keyBy(games, "_id")
             });
         })
         .catch(error => {
@@ -64,14 +65,14 @@ const loadGame = async (req, res) => {
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
         return;
-    } else if (!req.gameId) {
+    } else if (!req.params.id) {
         apiErrorUtils.badRequest(res, "No game save ID provided");
         return;
     }
     
-    const game = await Game.findById(new mongoose.Types.ObjectId(req.gameId)).then(game => game);
+    const game = await Game.findById(new mongoose.Types.ObjectId(req.params.id)).then(game => game);
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
-    if (game.user !== user._id) {
+    if (game.user.toString() !== user._id.toString()) {
         apiErrorUtils.badRequest("You cannot access someone else's game file");
         return;
     }
@@ -84,25 +85,32 @@ const loadGame = async (req, res) => {
 };
 
 const deleteGame = async (req, res) => {
+    const gameId = req.params.id;
     if (!req.session.userId) {
         apiErrorUtils.unauthorized(res);
         return;
-    } else if (!req.gameId) {
+    } else if (!gameId) {
         apiErrorUtils.badRequest(res, "No game save ID provided for deletion");
         return;
     }
     
-    const game = await Game.findById(new mongoose.Types.ObjectId(req.gameId)).then(game => game);
+    const game = await Game.findById(new mongoose.Types.ObjectId(gameId)).then(game => game);
     const user = await User.findById(new mongoose.Types.ObjectId(req.session.userId)).then(user => user);
-    if (game.user !== user._id) {
-        apiErrorUtils.badRequest("You cannot delete someone else's game file");
+    if (_.isEmpty(game)) {
+        loggingUtils.createUserLog(req, user._id, `User@${user.username} attempted to delete non-existent game file with id ${gameId}`);
+        res.status(204).send();
+        return;
+    }
+    
+    if (game.user.toString() !== user._id.toString()) {
+        apiErrorUtils.badRequest(res, "You cannot delete someone else's game file");
         return;
     }
     
     await Game.deleteOne({_id: game._id})
         .then(result => {
             loggingUtils.createUserLog(req, user._id, `User @${user.username} has deleted their game file created on ${game.created}`);
-            req.status(204).send();
+            res.status(204).send();
         })
         .catch(error => apiErrorUtils.internalServerError(req, res, error));
 };

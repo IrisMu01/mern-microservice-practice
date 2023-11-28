@@ -8,7 +8,9 @@ export const GameFile = ({id}) => {
     const gameFile = useSelector(state => state.save.gameSaves[id]);
     const dispatch = useDispatch();
 
-    // todo: doLoad
+    const doLoad = () => {
+        dispatch(loadGame(id));
+    }
 
     const doDelete = () => {
         dispatch(deleteGame(id));
@@ -23,7 +25,7 @@ export const GameFile = ({id}) => {
                     confirmedVariant="success"
                     size="sm"
                     content={<span>Load</span>}
-                    onClickDispatch={console.log("load")}
+                    onClickDispatch={doLoad}
                 />
                 <DoubleCheckButton
                     defaultVariant="outline-danger"
@@ -31,7 +33,7 @@ export const GameFile = ({id}) => {
                     className="ms-2"
                     size="sm"
                     content={<span>Delete</span>}
-                    onClickDispatch={console.log("delete")}
+                    onClickDispatch={doDelete}
                 />
             </Card.Body>
         </Card>

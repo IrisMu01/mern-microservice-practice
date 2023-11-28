@@ -2,6 +2,7 @@ import axios from "axios";
 import {addError, addMessage} from "../notification/notificationSlice";
 import {loadSaves, addSave, removeSave} from "./saveSlice";
 import {loadGameFile} from "../game/gameSlice";
+import {closeModal} from "../modal/modalSlice";
 
 const gameServiceClient = axios.create({
     baseURL: "http://localhost:4003/api/game",
@@ -23,7 +24,7 @@ export const save = gameState => dispatch => {
 export const findAllSavesForCurrentUser = () => dispatch => {
     gameServiceClient.get("/all")
         .then(response => {
-            dispatch(loadSaves(response.data.results));
+            dispatch(loadSaves(response.data));
         })
         .catch(error => {
             dispatch(addError("Unable to load your save files - " + error?.response?.data?.message || error));
@@ -33,7 +34,8 @@ export const findAllSavesForCurrentUser = () => dispatch => {
 export const loadGame = id => dispatch => {
     gameServiceClient.get(`/${id}/load`)
         .then(response => {
-            dispatch(loadGameFile(response.data.game));
+            dispatch(loadGameFile(response.data.game.gameState));
+            dispatch(closeModal());
             dispatch(addMessage("Game successfully loaded"));
         })
         .catch(error => {
