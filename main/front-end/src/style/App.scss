@@ -244,6 +244,10 @@ $movement-icon-size: 25 * 1px;
   }
 }
 
+.night-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .map-container {
   position: relative;
   width: calc(100% - 450px);

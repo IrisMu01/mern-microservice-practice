@@ -18,7 +18,7 @@ export const RulesModal = () => {
             <Modal.Title onClose={doClose}>Game Rules</Modal.Title>
             <Modal.Content>
                 <Accordion
-                    activeKey={["0", "1", "2", "3", "4", "5", "6", "7", "8"]}
+                    defaultActiveKey={["0", "1", "2", "3", "4", "5", "6", "7", "8"]}
                     className="rules-accordion"
                     alwaysOpen
                 >

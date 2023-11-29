@@ -1,7 +1,6 @@
 import {useSelector, useDispatch} from "react-redux";
 import {loadGame, deleteGame} from "../../../store/save/saveThunk";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import {DoubleCheckButton} from "../../utils/DoubleCheckButton";
 
 export const GameFile = ({id}) => {
