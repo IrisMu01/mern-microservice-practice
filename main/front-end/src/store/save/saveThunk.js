@@ -5,7 +5,7 @@ import {loadGameFile} from "../game/gameSlice";
 import {closeModal} from "../modal/modalSlice";
 
 const gameServiceClient = axios.create({
-    baseURL: "http://localhost:4003/api/game",
+    baseURL: process.env.REACT_APP_GAME_SERVICE_URL,
     timeout: 30000,
     withCredentials: true
 });

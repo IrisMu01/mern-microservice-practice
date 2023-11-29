@@ -25,7 +25,7 @@ const launch = async (params) => {
     try {
         const app = express();
         app.use(cors({
-            origin: `http://localhost:3000`,
+            origin: process.env.FRONT_END_URL,
             credentials: true
         }));
         app.use(bodyParser.json());

@@ -4,13 +4,13 @@ import {addError, addMessage} from "../notification/notificationSlice";
 import {closeModal} from "../modal/modalSlice";
 
 const authServiceClient = axios.create({
-    baseURL: "http://localhost:4000/api/auth",
+    baseURL: process.env.REACT_APP_AUTH_SERVICE_URL,
     timeout: 30000,
     withCredentials: true
 });
 
 const userServiceClient = axios.create({
-    baseURL: "http://localhost:4001/api/users",
+    baseURL: process.env.REACT_APP_USER_SERVICE_URL,
     timeout: 30000,
     withCredentials: true
 });
