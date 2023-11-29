@@ -8,7 +8,7 @@ export const Fog = () => {
             {fogMap.map((row, y) => (
                 <div className="map-row" key={`fog-${y}`}>
                     {row.map((isUnknown, x) => (
-                        <div className={`cell${isUnknown ? " unknown" : ""}`} key={`fog-${x}-${y}`}>
+                        <div className={`cell${isUnknown ? " fog" : ""}`} key={`fog-${x}-${y}`}>
                         </div>
                     ))}
                 </div>

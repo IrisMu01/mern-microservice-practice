@@ -44,5 +44,37 @@ export const modalTypes = {
     signIn: "SIGN_IN",
     register: "REGISTER",
     currentUser: "CURRENT_USER",
-    gameFiles: "GAME_FILES"
+    gameFiles: "GAME_FILES",
+    rules: "GAME_RULES"
 };
+
+export const ruleIconTypes = {
+    forbiddenGoop: "forbidden-goop",
+    tree: "tree",
+    hunger: "hunger",
+    sanity: "sanity",
+    actionPoint: "action-point",
+    home: "home",
+    movementA: "movement-a",
+    movementW: "movement-w",
+    movementS: "movement-s",
+    movementD: "movement-d",
+    human: "human",
+    dog: "dog",
+    grass: "grass",
+    shallowWater: "shallow-water",
+    deepWater: "deep-water",
+    cursedLand: "cursed-land",
+    pawedGrass: "pawed-grass",
+    cursedTree: "cursed-tree",
+    seed: "seed",
+    crop: "crop",
+    unexplored: "unexplored",
+    boat: "boat",
+    wood: "wood",
+    sapling: "sapling",
+    wilt: "wilt",
+    fish: "fish",
+    food: "food",
+    night: "night"
+}

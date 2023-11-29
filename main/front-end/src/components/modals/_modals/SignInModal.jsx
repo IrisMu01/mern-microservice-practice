@@ -11,7 +11,6 @@ import Col from "react-bootstrap/Col";
 
 // todo
 //  - register form validation
-//  - finish other modals
 export const SignInModal = () => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);

@@ -30,13 +30,25 @@ export const Navigation = () => {
         }));
     };
     
+    const openRulesModal = () => {
+        dispatch(openModal({
+            type: modalTypes.rules,
+            data: null
+        }));
+    };
+    
     return (
         <Navbar expand="sm" data-bs-theme="dark" bg="navbar" sticky="top">
             <Container>
                 <Navbar.Brand>Game Title</Navbar.Brand>
                 <Navbar.Toggle aria-controls="page-navbar" />
-                <Navbar.Collapse id="page-navbar" className="justify-content-end">
-                    <Nav className="d-flex align-items-center">
+                <Navbar.Collapse id="page-navbar">
+                    <Nav>
+                        <NavLink onClick={openRulesModal}>
+                            <Navbar.Text>How To Play</Navbar.Text>
+                        </NavLink>
+                    </Nav>
+                    <Nav className="ms-auto d-flex align-items-center">
                         {currentUser && (
                             <NavLink onClick={openCurrentUserModal}>
                                 <Navbar.Text className="d-flex align-items-center">

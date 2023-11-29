@@ -1,6 +1,7 @@
 $cell-icon-size: 40 * 1px;
 $grass-color: #629b54;
 $movement-icon-size: 25 * 1px;
+@use "./colors.scss";
 
 .App {
   background-color: #282828;
@@ -40,86 +41,12 @@ $movement-icon-size: 25 * 1px;
   font-size: $cell-icon-size;
   text-align: center;
 
-  /* ---- terrain ---- */
-
-  &.cursed-grass {
-    background-color: #835a72;
-    color: #262626;
-  }
-
-  &.farm {
-    background-color: $grass-color;
-    color: #efa860;
-  }
-
-  &.grass {
-    background-color: $grass-color;
-  }
-
-  &.house {
-    background-color: $grass-color;
-    color: #a24b16;
-  }
-
-  &.paw {
-    background-color: $grass-color;
-    color: #673800;
-  }
-
-  &.baby-tree {
-    background-color: $grass-color;
-    color: #126206;
+  &.baby-tree, &.cursed-baby-tree {
     font-size: $cell-icon-size * 0.6;
     padding-top: $cell-icon-size * 0.33;
-    &.on-cursed-grass {
-      background-color: #835a72;
-      color: #ffffff;
-    }
   }
 
-  &.tree {
-    background-color: $grass-color;
-    color: #094900;
-    &.on-cursed-grass {
-      background-color: #835a72;
-      color: #ffffff;
-    }
-  }
-
-  &.unknown {
-    background-color: #888;
-  }
-
-  &.water {
-    background-color: #44a8cb;
-    color: #437ead;
-  }
-
-  &.water-deep {
-    background-color: #236279;
-    color: #4179a2;
-  }
-
-  &.boat {
-    background-color: #44a8cb;
-    color: #a97856;
-  }
-
-  &.wilt {
-    background-color: #65525a;
-    color: #696462;
-  }
-
-  &.seedling {
-    background-color: $grass-color;
-    color: #117c00;
-  }
-
-  /* ---- player ---- */
   &.player {
-    background-color: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-
     animation: blinker 3s linear infinite;
     @keyframes blinker {
       50% {
@@ -129,9 +56,6 @@ $movement-icon-size: 25 * 1px;
   }
 
   &.dog {
-   background-color: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-
     animation: blinker 3s linear infinite;
     @keyframes blinker {
       50% {
@@ -144,8 +68,6 @@ $movement-icon-size: 25 * 1px;
     padding-top: $cell-icon-size * 0.45;
     padding-left: $cell-icon-size * 0.1;
     font-size: $cell-icon-size * 0.5;
-    background-color: rgba(255, 255, 255, 0.4);
-    color: #ffffff;
 
     animation: blinker 3s linear infinite;
     @keyframes blinker {
@@ -186,6 +108,8 @@ $movement-icon-size: 25 * 1px;
   align-items: center;
 
   .modal-box {
+    display: flex;
+    flex-direction: column;
     min-width: 350px;
     height: fit-content;
     max-height: 80vh;
@@ -215,11 +139,12 @@ $movement-icon-size: 25 * 1px;
 
     .modal-content {
       padding: 15px;
+      overflow-y: auto;
     }
 
     .modal-footer {
-      padding-bottom: 15px;
-      border-top: 1px solid #8a8a8a;
+      padding: 10px 0 5px 0;
+      border-top: 1px solid #c5c5c5;
       margin: 15px 15px 0 15px;
     }
   }
@@ -295,12 +220,10 @@ $movement-icon-size: 25 * 1px;
 
     .status {
       display: flex;
+      align-items: center;
 
-      .hunger {
-        color: #ffae5a;
-      }
-      .sanity {
-        color: #ffafaf;
+      .status-icon {
+        font-size: 15px;
       }
     }
   }
@@ -318,25 +241,6 @@ $movement-icon-size: 25 * 1px;
     display: inline-block;
     width: 20px;
     margin-right: 10px;
-
-    &.seed {
-      color: #b3e55c;
-    }
-    &.sapling {
-      color: #b4f38f;
-    }
-    &.wood {
-      color: #b07655;
-    }
-    &.fish {
-      color: #75c5d3;
-    }
-    &.crop {
-      color: #efa860;
-    }
-    &.food {
-      color: #ef8140;
-    }
   }
 }
 
@@ -390,6 +294,47 @@ $movement-icon-size: 25 * 1px;
     .btn-close {
       padding: 15px;
     }
+  }
+}
+
+.rules-accordion {
+  // bootstrap overrides
+
+  .accordion-button {
+    font-size: 18px;
+
+    &.collapsed {
+      background-color: #979d97;
+      color: #ffffff;
+    }
+
+    &:not(.collapsed) {
+      background-color: #758f7d;
+      color: #ffffff;
+    }
+  }
+
+  .accordion-body {
+    font-size: 16px;
+    background-color: #f5f5f5;
+    color: #2f2f2f;
+  }
+}
+
+.rule-icon {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: center;
+
+  &.default-background {
+    background-color: #4b4b4b;
+  }
+
+  &.invisible-icon {
+    color: rgba(0, 0, 0, 0);
   }
 }
 

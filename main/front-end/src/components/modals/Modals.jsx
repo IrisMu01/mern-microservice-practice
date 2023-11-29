@@ -4,6 +4,7 @@ import {RegisterModal} from "./_modals/RegisterModal";
 import {SignInModal} from "./_modals/SignInModal";
 import {CurrentUserModal} from "./_modals/CurrentUserModal";
 import {GameFileModal} from "./_modals/GameFileModal";
+import {RulesModal} from "./_modals/RulesModal";
 
 // todo a case-sensitive font family should be used for the account-related functionalities
 export const Modals = () => {
@@ -26,6 +27,10 @@ export const Modals = () => {
             case (modalTypes.gameFiles):
                 return (
                     <GameFileModal/>
+                );
+            case (modalTypes.rules):
+                return (
+                    <RulesModal/>
                 );
             default:
                 return (<div></div>);

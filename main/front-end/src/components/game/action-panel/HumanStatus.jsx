@@ -9,8 +9,8 @@ export const HumanStatus = () => {
         <div className="human-status">
             <FontAwesomeIcon className="status-entity-icon fa-4x" icon={"user"}/>
             <div className="statuses">
-                <div className="status">
-                    <FontAwesomeIcon className="hunger" icon={"drumstick-bite"}/>
+                <div className="status py-1">
+                    <FontAwesomeIcon className="status-icon hunger" icon={"drumstick-bite"}/>
                     <div className="progress-bar-wrapper">
                         <ProgressBar
                             striped variant={"success"}
@@ -19,8 +19,8 @@ export const HumanStatus = () => {
                         />
                     </div>
                 </div>
-                <div className="status">
-                    <FontAwesomeIcon className="sanity" icon={"brain"}/>
+                <div className="status pt-1">
+                    <FontAwesomeIcon className="status-icon sanity" icon={"brain"}/>
                     <div className="progress-bar-wrapper">
                         <ProgressBar
                             striped variant={"success"}
@@ -30,9 +30,9 @@ export const HumanStatus = () => {
                     </div>
                 </div>
                 <div className="status">
-                    {humanStatus.actionPoints} &nbsp;
-                    <small>
-                        action points left this round
+                    <FontAwesomeIcon className="status-icon action-points" icon={"hand"}/>
+                    <small className="ms-2 mt-0">
+                        {humanStatus.actionPoints} action points left this round
                     </small>
                 </div>
             </div>
