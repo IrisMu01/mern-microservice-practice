@@ -7,7 +7,7 @@ const redis = require('redis');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 const path = require('path');
-require('dotenv').config({path: path.resolve(__dirname, '../.env')});
+require('dotenv').config({path: path.resolve(__dirname, '../../../.env')});
 
 const launch = async (params) => {
     if (_.isEmpty(params)) {

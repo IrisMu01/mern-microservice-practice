@@ -1,4 +1,5 @@
-main/node_modules
 /.idea
-main/src/.env
+main/back-end/.env
 main/front-end/.env
+
+# .env is not separated between different microservices because they connect to the same db/redis/rabbitMQ servers

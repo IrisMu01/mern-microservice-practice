@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const appStarter = require('../../common-utils/appStarter');
+const appStarter = require('../../../common/src/utils/appStarter');
 const logService = require('./logService');
 
 router.get('/search', logService.search);

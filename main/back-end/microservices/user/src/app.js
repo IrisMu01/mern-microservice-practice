@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const appStarter = require('../../common-utils/appStarter');
+const appStarter = require('../../../common/src/utils/appStarter');
 const userService = require('./userService');
 
 router.post('/register', userService.registerUser);

@@ -1,9 +1,9 @@
 const _ = require("lodash");
-const User = require("../../db-models/User");
-const authUtils = require("../auth/authUtils");
+const User = require("../../../common/src/db-models/User");
+const authUtils = require("../../auth/src/authUtils");
 const mongoose = require("mongoose");
-const loggingUtils = require("../../common-utils/loggingUtils");
-const apiErrorUtils = require("../../common-utils/apiErrorUtils");
+const loggingUtils = require("../../../common/src/utils/loggingUtils");
+const apiErrorUtils = require("../../../common/src/utils/apiErrorUtils");
 
 // todo add support for sending emails containing verification code
 const registerUser = async (req, res) => {
