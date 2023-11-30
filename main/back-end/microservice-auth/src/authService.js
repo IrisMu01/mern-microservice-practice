@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const authUtils = require("./authUtils");
+const authUtils = require("../../common/src/utils/authUtils");
 const mongoose = require("mongoose");
 const User = require("../../common/src/db-models/User");
 const loggingUtils = require('../../common/src/utils/loggingUtils');
