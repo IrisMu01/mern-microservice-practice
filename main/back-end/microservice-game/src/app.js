@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const appStarter = require('../../../common/src/utils/appStarter');
+const appStarter = require('../../common/src/utils/appStarter');
 const gameService = require('./gameService');
 
 router.post('/save', gameService.saveGame);

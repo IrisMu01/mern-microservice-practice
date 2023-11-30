@@ -1,9 +1,9 @@
 const _ = require("lodash");
-const User = require("../../../common/src/db-models/User");
-const Game = require("../../../common/src/db-models/Game");
+const User = require("../../common/src/db-models/User");
+const Game = require("../../common/src/db-models/Game");
 const mongoose = require("mongoose");
-const loggingUtils = require("../../../common/src/utils/loggingUtils");
-const apiErrorUtils = require("../../../common/src/utils/apiErrorUtils");
+const loggingUtils = require("../../common/src/utils/loggingUtils");
+const apiErrorUtils = require("../../common/src/utils/apiErrorUtils");
 
 // todo in the future, consider adding X-save-files-per-user limit
 const saveGame = async (req, res) => {

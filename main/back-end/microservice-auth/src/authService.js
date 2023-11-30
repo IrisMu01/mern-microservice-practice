@@ -1,9 +1,9 @@
 const _ = require("lodash");
 const authUtils = require("./authUtils");
 const mongoose = require("mongoose");
-const User = require("../../../common/src/db-models/User");
-const loggingUtils = require('../../../common/src/utils/loggingUtils');
-const apiErrorUtils = require('../../../common/src/utils/apiErrorUtils');
+const User = require("../../common/src/db-models/User");
+const loggingUtils = require('../../common/src/utils/loggingUtils');
+const apiErrorUtils = require('../../common/src/utils/apiErrorUtils');
 
 const login = async (req, res) => {
     if (!req.body.username || !req.body.password) {

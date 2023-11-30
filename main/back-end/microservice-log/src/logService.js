@@ -4,11 +4,11 @@
 * (later with cronJobService: clear logs >30 days old)
 * */
 const _ = require("lodash");
-const rabbitMQ = require("../../../common/src/utils/rabbitMQUtils");
+const rabbitMQ = require("../../common/src/utils/rabbitMQUtils");
 const mongoose = require("mongoose");
-const Log = require("../../../common/src/db-models/Log");
+const Log = require("../../common/src/db-models/Log");
 const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
-const apiErrorUtils = require("../../../common/src/utils/apiErrorUtils");
+const apiErrorUtils = require("../../common/src/utils/apiErrorUtils");
 
 let mqClient;
 const connectToRabbitMQ = async () => {
