@@ -1,10 +1,11 @@
 const amqp = require("amqplib");
+const config = require("./config");
 
 /**
  * @return an object with the connection and channel fields
  * */
 const getMQClient = async () => {
-    const connection = await amqp.connect(process.env.RABBIT_MQ_URL).then(connection => connection);
+    const connection = await amqp.connect(config["RABBIT_MQ_URL"]).then(connection => connection);
     const channel = await connection.createChannel().then(channel => channel);
     console.log("connected to Rabbit MQ");
     return { connection: connection, channel: channel };

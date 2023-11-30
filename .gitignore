@@ -1,5 +1,10 @@
 /.idea
+
+# .env is not separated between different microservices because they connect to the same db/redis/rabbitMQ servers
 main/back-end/.env
 main/front-end/.env
 
-# .env is not separated between different microservices because they connect to the same db/redis/rabbitMQ servers
+# scripts/files for creating docker secrets
+main/secrets/files
+main/secrets/swarm-scripts/secrets.sh
+main/secrets/swarm-scripts/secrets.ps1

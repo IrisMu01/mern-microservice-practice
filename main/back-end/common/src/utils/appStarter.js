@@ -6,8 +6,7 @@ const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 const mongoose = require('mongoose');
 const _ = require('lodash');
-const path = require('path');
-require('dotenv').config({path: path.resolve(__dirname, '../../../.env')});
+const config = require('./config');
 
 const launch = async (params) => {
     if (_.isEmpty(params)) {
@@ -25,14 +24,14 @@ const launch = async (params) => {
     try {
         const app = express();
         app.use(cors({
-            origin: process.env.FRONT_END_URL,
+            origin: config["FRONT_END_URL"],
             credentials: true
         }));
         app.use(bodyParser.json());
     
         const useDb = params.useDb || true;
         if (useDb) {
-            const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?retryWrites=true&w=majority`;
+            const uri = `mongodb+srv://${config["DB_USERNAME"]}:${config["DB_PASSWORD"]}@${config["DB_URL"]}/?retryWrites=true&w=majority`;
             await mongoose.connect(uri, {useNewUrlParser: true});
             console.log("Connected to database");
             mongoose.set("returnOriginal", false);
@@ -40,10 +39,10 @@ const launch = async (params) => {
         }
     
         const redisClient = redis.createClient({
-            password: process.env.REDIS_PASSWORD,
+            password: config["REDIS_PASSWORD"],
             socket: {
-                host: process.env.REDIS_HOST,
-                port: process.env.REDIS_HOST_PORT
+                host: config["REDIS_HOST"],
+                port: config["REDIS_HOST_PORT"]
             }
         });
         await redisClient.connect();
@@ -53,7 +52,7 @@ const launch = async (params) => {
         });
         app.use(sessions({
             store: redisStore,
-            secret: process.env.SESSION_SECRET,
+            secret: config["SESSION_SECRET"],
             saveUninitialized: false,
             cookie: {maxAge: 1000*60*60*24}, // one day
             resave: false

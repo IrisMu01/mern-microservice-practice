@@ -1,0 +1,124 @@
+services:
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.12.10
+    mem_limit: 256m
+    cpus: 0.5
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  auth-service:
+    build:
+      context: back-end
+      dockerfile: auth.Dockerfile
+    ports:
+      - 4000:4000
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    links:
+      - rabbitmq
+    secrets:
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
+      - SESSION_SECRET
+      - REDIS_HOST
+      - REDIS_HOST_PORT
+      - REDIS_PASSWORD
+    environment:
+      ACTIVE_PROFILE: prod
+      FRONT_END_URL: http://localhost:3000
+      RABBIT_MQ_URL: amqp://rabbitmq
+
+  user-service:
+    build:
+      context: back-end
+      dockerfile: user.Dockerfile
+    ports:
+      - 4001:4001
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    links:
+      - rabbitmq
+    secrets:
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
+      - SESSION_SECRET
+      - REDIS_HOST
+      - REDIS_HOST_PORT
+      - REDIS_PASSWORD
+    environment:
+      ACTIVE_PROFILE: prod
+      FRONT_END_URL: http://localhost:3000
+      RABBIT_MQ_URL: amqp://rabbitmq
+
+  log-service:
+    build:
+      context: back-end
+      dockerfile: log.Dockerfile
+    ports:
+      - 4002:4002
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    links:
+      - rabbitmq
+    secrets:
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
+      - SESSION_SECRET
+      - REDIS_HOST
+      - REDIS_HOST_PORT
+      - REDIS_PASSWORD
+    environment:
+      ACTIVE_PROFILE: prod
+      FRONT_END_URL: http://localhost:3000
+      RABBIT_MQ_URL: amqp://rabbitmq
+
+  game-service:
+    build:
+      context: back-end
+      dockerfile: user.Dockerfile
+    ports:
+      - 4003:4003
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    links:
+      - rabbitmq
+    secrets:
+      - DB_URL
+      - DB_USERNAME
+      - DB_PASSWORD
+      - SESSION_SECRET
+      - REDIS_HOST
+      - REDIS_HOST_PORT
+      - REDIS_PASSWORD
+    environment:
+      ACTIVE_PROFILE: prod
+      FRONT_END_URL: http://localhost:3000
+      RABBIT_MQ_URL: amqp://rabbitmq
+
+secrets:
+  DB_PASSWORD:
+    file: ./secrets/files/DB_PASSWORD.txt
+  DB_URL:
+    file: ./secrets/files/DB_URL.txt
+  DB_USERNAME:
+    file: ./secrets/files/DB_USERNAME.txt
+  REDIS_HOST:
+    file: ./secrets/files/REDIS_HOST.txt
+  REDIS_HOST_PORT:
+    file: ./secrets/files/REDIS_HOST_PORT.txt
+  REDIS_PASSWORD:
+    file: ./secrets/files/REDIS_PASSWORD.txt
+  SESSION_SECRET:
+    file: ./secrets/files/SESSION_SECRET.txt
