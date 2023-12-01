@@ -1,18 +1,18 @@
 FROM node:18-alpine
-WORKDIR /log-service
+WORKDIR /work-dir
 
 # copy & install common library dependencies
 COPY common/package.json common/package-lock.json common/
-RUN ls /log-service/
+RUN ls /work-dir/
 
-RUN cd /log-service/common/ && npm install --production
+RUN cd /work-dir/common/ && npm install --production
 
 # copy common library source code
 COPY common/src/ common/src/
 
 # copy & install microservice dependencies
 COPY microservice-log/package.json microservice-log/package-lock.json app/
-RUN cd /log-service/app/ && npm install --production
+RUN cd /work-dir/app/ && npm install --production
 
 # copy microservice source code
 COPY microservice-log/src app/src/

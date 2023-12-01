@@ -157,7 +157,6 @@ export const timeControl = {
     
         // check success conditions: no cursed grass/wilt
         if (noCursedGrassOrWilt) {
-            console.log("Winning conditions met");
             state.gameStatus = true;
         }
     },

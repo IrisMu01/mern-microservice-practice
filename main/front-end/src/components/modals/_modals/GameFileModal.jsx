@@ -10,7 +10,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const GameFileModal = () => {
     const gameFileIds = useSelector(state => state.save.results);
-    console.log(gameFileIds);
     const gameState = useSelector(state => state.game);
     const currentUser = useSelector(state => state.auth.currentUser);
     const dispatch = useDispatch();

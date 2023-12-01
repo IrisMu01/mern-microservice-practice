@@ -86,7 +86,7 @@ services:
   game-service:
     build:
       context: back-end
-      dockerfile: user.Dockerfile
+      dockerfile: game.Dockerfile
     ports:
       - 4003:4003
     depends_on:
@@ -106,6 +106,17 @@ services:
       ACTIVE_PROFILE: prod
       FRONT_END_URL: http://localhost:3000
       RABBIT_MQ_URL: amqp://rabbitmq
+
+  front-end:
+    build:
+      context: front-end
+      dockerfile: frontEnd.Dockerfile
+    ports:
+      - 3000:80
+    links:
+      - auth-service
+      - user-service
+      - game-service
 
 secrets:
   DB_PASSWORD:
