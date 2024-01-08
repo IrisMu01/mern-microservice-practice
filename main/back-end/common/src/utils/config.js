@@ -17,11 +17,13 @@ const secretNames = [
 
 const envVariableNames = [
     "FRONT_END_URL",
-    "RABBIT_MQ_URL"
+    "RABBIT_MQ_URL",
+    "MESSAGE_QUEUE_MODE"
 ];
 
 const config = {};
 
+// configs from docker secret files
 if (process.env.ACTIVE_PROFILE === "dev") {
     console.log("getting secrets from local .env file");
     require('dotenv').config({path: path.resolve(__dirname, '../../../.env')});
@@ -34,6 +36,7 @@ if (process.env.ACTIVE_PROFILE === "dev") {
     });
 }
 
+// configs from env variables
 _.forEach(envVariableNames, envVariableName => {
     config[envVariableName] = process.env[envVariableName];
 });

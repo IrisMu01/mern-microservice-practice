@@ -1,7 +1,11 @@
 const rabbitMQ = require("./rabbitMQUtils");
 const exchange = rabbitMQ.exchange, queues = rabbitMQ.queues, keys = rabbitMQ.keys;
+const sqs = require("./awsSqsUtils");
+const config = require("./config");
+const { SendMessageCommand } = require("@aws-sdk/client-sqs");
 
 let mqClient;
+let awsQueue;
 const connectToRabbitMQ = async () => {
     mqClient = await rabbitMQ.getMQClient();
     await Promise.all([
@@ -11,7 +15,46 @@ const connectToRabbitMQ = async () => {
         console.log("Logging Utils - MQ exchanges and queues asserted");
     });
 };
-connectToRabbitMQ();
+const connectToSQS = async () => {
+    awsQueue = await sqs.connect();
+}
+
+const useSQS = config["MESSAGE_QUEUE_MODE"] !== "RABBIT_MQ";
+if (!useSQS) {
+    connectToRabbitMQ();
+} else {
+    connectToSQS();
+}
+
+const createUserLogRabbitMQImpl = (sourceLog) => {
+    mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
+};
+
+const createUserLogSQSImpl = (sourceLog) => {
+    const command = new SendMessageCommand({
+        DelaySeconds: 3,
+        MessageAttributes: {
+            "timestamp": {
+                DataType: "Number",
+                StringValue: new Date().getTime().toString()
+            },
+            "logType": {
+                DataType: "String",
+                StringValue: "user"
+            }
+        },
+        MessageBody: JSON.stringify(sourceLog),
+        QueueUrl: awsQueue.url
+    });
+    
+    awsQueue.client.send(command, function(err, data) {
+        if (err) {
+            console.error("Error sending new user log entry to SQS", err);
+        } else {
+            console.log("New user log entry sent to SQS", data.MessageId);
+        }
+    });
+};
 
 const createUserLog = (req, userId, logMessage) => {
     const sourceLog = {
@@ -22,7 +65,42 @@ const createUserLog = (req, userId, logMessage) => {
         created: new Date(),
         message: logMessage
     };
-    mqClient.channel.publish(exchange.name, keys.userLogs, Buffer.from(JSON.stringify(sourceLog)));
+    
+    if (useSQS) {
+        createUserLogSQSImpl(sourceLog);
+    } else {
+        createUserLogRabbitMQImpl(sourceLog);
+    }
+}
+
+const createErrorLogRabbitMQImpl = (sourceLog) => {
+    mqClient.channel.publish(exchange.name, keys.errorLogs, Buffer.from(JSON.stringify(sourceLog)));
+};
+
+const createErrorLogSQSImpl = (sourceLog) => {
+    const command = new SendMessageCommand({
+        DelaySeconds: 3,
+        MessageAttributes: {
+            "timestamp": {
+                DataType: "Number",
+                StringValue: new Date().getTime()
+            },
+            "logType": {
+                DataType: "String",
+                StringValue: "error"
+            }
+        },
+        MessageBody: JSON.stringify(sourceLog),
+        QueueUrl: awsQueue.url
+    });
+    
+    awsQueue.client.send(command, function(err, data) {
+        if (err) {
+            console.error("Error sending new error log entry to SQS", err);
+        } else {
+            console.log("New error log entry sent to SQS", data.MessageId);
+        }
+    });
 }
 
 const createErrorLog = (req, error) => {
@@ -43,7 +121,12 @@ const createErrorLog = (req, error) => {
             sourceLog.user = req.session.userId;
         }
     }
-    mqClient.channel.publish(exchange.name, keys.errorLogs, Buffer.from(JSON.stringify(sourceLog)));
+    
+    if (useSQS) {
+        createErrorLogSQSImpl(sourceLog);
+    } else {
+        createErrorLogRabbitMQImpl(sourceLog);
+    }
 }
 
 exports.createUserLog = createUserLog;
