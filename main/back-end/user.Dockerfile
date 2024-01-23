@@ -15,7 +15,7 @@ COPY microservice-user/package.json microservice-user/package-lock.json app/
 RUN cd /work-dir/app/ && npm install --production
 
 # copy microservice source code
-COPY microservice-user/src app/src/
+COPY microservice-user/src /work-dir/app/src/
 
 # command to start app
-CMD ["node", "app/src/app.js"]
+CMD ["node", "/work-dir/app/src/app.js"]
