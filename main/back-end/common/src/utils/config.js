@@ -18,7 +18,8 @@ const secretNames = [
 const envVariableNames = [
     "FRONT_END_URL",
     "RABBIT_MQ_URL",
-    "MESSAGE_QUEUE_MODE"
+    "MESSAGE_QUEUE_MODE",
+    "DOT_AWS_PATH"
 ];
 
 const config = {};
