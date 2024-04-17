@@ -8,6 +8,3 @@ main/front-end/.env
 main/secrets/files
 main/secrets/swarm-scripts/secrets.sh
 main/secrets/swarm-scripts/secrets.ps1
-
-# contains aws api calls with credentials
-main/scripts/boto3
