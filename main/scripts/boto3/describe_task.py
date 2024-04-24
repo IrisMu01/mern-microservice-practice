@@ -1,6 +1,8 @@
 #!/bin/env python
 
 import argparse
+import datetime
+
 import boto3
 from botocore.config import Config
 
@@ -34,5 +36,7 @@ log_response = logs_client.get_log_events(
     limit=100
 )
 print(f"------------ Task Log stream result ----------------\n")
-print(log_response)
+log_strings = [f"{datetime.datetime.fromtimestamp(event['timestamp']/1000)} | {event['message']}"
+               for event in log_response['events']]
+print("\n".join(log_strings))
 print("\n-----------------------------------")
