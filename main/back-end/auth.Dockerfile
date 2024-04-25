@@ -1,4 +1,5 @@
-FROM node:18-alpine
+# reference: https://stackoverflow.com/questions/65612411/forcing-docker-to-use-linux-amd64-platform-by-default-on-macos/69636473#69636473
+FROM --platform=linux/amd64 node:18-alpine
 WORKDIR /work-dir
 
 # copy & install common library dependencies
