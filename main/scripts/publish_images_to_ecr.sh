@@ -7,7 +7,7 @@ cd ../back-end/ || exit
 # copy contents of /.aws folder to the current directory
 cp -r "$dotAwsPath" .
 
-authServiceVersion="0.0.5"
+authServiceVersion="0.0.6"
 userServiceVersion="0.0.1"
 logServiceVersion="0.0.1"
 gameServiceVersion="0.0.1"
@@ -31,13 +31,16 @@ docker tag "$authServiceTag" "$ecrRootURL$authServiceTag"
 
 echo "---------- pushing to ecr -----------"
 
-# run below locally in the terminal to authenticate to the public ECR:
+# if script fails at docker push, try running the below locally in the terminal to authenticate to the public ECR:
 #aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/q6t4w2n1/
 
 docker push "$ecrRootURL$authServiceTag"
 #docker push "$ecrRootURL$userServiceTag"
 #docker push "$ecrRootURL$logServiceTag"
 #docker push "$ecrRootURL$gameServiceTag"
+
+# automatically create ECS task definitions based on new image
+
 
 # delete copied .aws directory
 rm -r ./.aws
