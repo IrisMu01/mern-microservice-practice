@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const sessions = require('express-session');
 const RedisStore = require('connect-redis').default;
+const RedisClustr = require('redis-clustr');
 const redis = require('redis');
 const mongoose = require('mongoose');
 const _ = require('lodash');
@@ -39,12 +40,14 @@ const launch = async (params) => {
         }
     
         const redisClient = redis.createClient({
+            username: "mern-game-redis",
             password: config["REDIS_PASSWORD"],
             socket: {
                 host: config["REDIS_HOST"],
-                port: config["REDIS_HOST_PORT"]
+                port: config["REDIS_HOST_PORT"],
             }
         });
+
         await redisClient.connect();
         const redisStore = new RedisStore({
             client: redisClient,
