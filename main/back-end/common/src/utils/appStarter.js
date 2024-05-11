@@ -44,8 +44,10 @@ const launch = async (params) => {
             socket: {
                 host: config["REDIS_HOST"],
                 port: config["REDIS_HOST_PORT"],
+                tls: true
             }
         });
+
 
         await redisClient.connect();
         const redisStore = new RedisStore({
