@@ -7,7 +7,7 @@ cd ../back-end/ || exit
 # copy contents of /.aws folder to the current directory
 cp -r "$dotAwsPath" .
 
-authServiceVersion="0.0.7"
+authServiceVersion="0.0.8"
 userServiceVersion="0.0.1"
 logServiceVersion="0.0.1"
 gameServiceVersion="0.0.1"
