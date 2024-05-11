@@ -1,3 +1,4 @@
+#no longer maintained; I've switched to developing on MacOS
 param ($dotAwsPath)
 
 cd ../back-end/
