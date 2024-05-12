@@ -8,6 +8,8 @@ manual todos in the AWS console.
 
 This script assumes that in the task definition's container definitions, there is only one
 and essential container.
+
+If the provided new image tag is used
 """
 
 import argparse
@@ -39,6 +41,10 @@ print(f"Fetching task definition for {args.ecs_task_definition}")
 
 # update task definition json
 original_image = task_definition["taskDefinition"]["containerDefinitions"][0]["image"]
+if original_image == args.ecr_new_image_tag:
+    print(f"{args.ecs_task_definition} does not need a task definition revision with image {args.ecr_new_image_tag}; exiting the script early")
+    exit(0)
+
 updated_image = "/".join(
     original_image.split("/")[:-1] + [args.ecr_new_image_tag])
 new_task_definition = task_definition["taskDefinition"]

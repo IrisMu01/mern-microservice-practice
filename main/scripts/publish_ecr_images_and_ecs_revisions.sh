@@ -8,9 +8,9 @@ cd ../back-end/ || exit
 cp -r "$dotAwsPath" .
 
 authServiceVersion="0.0.9"
-userServiceVersion="0.0.1"
-logServiceVersion="0.0.1"
-gameServiceVersion="0.0.1"
+userServiceVersion="0.0.2"
+logServiceVersion="0.0.2"
+gameServiceVersion="0.0.2"
 
 authServiceTag="main-auth-service:$authServiceVersion"
 userServiceTag="main-user-service:$userServiceVersion"
@@ -20,14 +20,14 @@ gameServiceTag="main-game-service:$gameServiceVersion"
 ecrRootURL="public.ecr.aws/q6t4w2n1/"
 
 docker build -t "$authServiceTag" -f ./auth.Dockerfile .
-#docker build -t "$userServiceTag" -f ./user.Dockerfile .
-#docker build -t "$logServiceTag" -f ./log.Dockerfile .
-#docker build -t "$gameServiceTag" -f ./game.Dockerfile .
+docker build -t "$userServiceTag" -f ./user.Dockerfile .
+docker build -t "$logServiceTag" -f ./log.Dockerfile .
+docker build -t "$gameServiceTag" -f ./game.Dockerfile .
 
 docker tag "$authServiceTag" "$ecrRootURL$authServiceTag"
-#docker tag "$userServiceTag" "$ecrRootURL$userServiceTag"
-#docker tag "$logServiceTag" "$ecrRootURL$logServiceTag"
-#docker tag "$gameServiceTag" "$ecrRootURL$gameServiceTag"
+docker tag "$userServiceTag" "$ecrRootURL$userServiceTag"
+docker tag "$logServiceTag" "$ecrRootURL$logServiceTag"
+docker tag "$gameServiceTag" "$ecrRootURL$gameServiceTag"
 
 echo "---------- pushing to ecr -----------"
 
@@ -35,13 +35,16 @@ echo "---------- pushing to ecr -----------"
 #aws ecr-public get-login-password --debug --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/q6t4w2n1/
 
 docker push "$ecrRootURL$authServiceTag"
-#docker push "$ecrRootURL$userServiceTag"
-#docker push "$ecrRootURL$logServiceTag"
-#docker push "$ecrRootURL$gameServiceTag"
+docker push "$ecrRootURL$userServiceTag"
+docker push "$ecrRootURL$logServiceTag"
+docker push "$ecrRootURL$gameServiceTag"
 
 # automatically create ECS task definitions based on new image
 cd ../scripts/ || exit
 python3 boto3/create_task_definition_revision.py --ecs_task_definition=auth-service --ecr_new_image_tag=$authServiceTag
+python3 boto3/create_task_definition_revision.py --ecs_task_definition=user-service --ecr_new_image_tag=$userServiceTag
+python3 boto3/create_task_definition_revision.py --ecs_task_definition=log-service --ecr_new_image_tag=$logServiceTag
+python3 boto3/create_task_definition_revision.py --ecs_task_definition=game-service --ecr_new_image_tag=$gameServiceTag
 
 # delete copied .aws directory
 cd ../back-end/ || exit
