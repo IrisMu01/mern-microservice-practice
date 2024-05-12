@@ -3,6 +3,10 @@ const router = express.Router();
 const appStarter = require('../../common/src/utils/appStarter');
 const userService = require('./userService');
 
+router.get("/ping", (req, res) => {
+    res.status(200).send();
+});
+
 router.post('/register', userService.registerUser);
 
 router.put('/verify', userService.verifyUser);
