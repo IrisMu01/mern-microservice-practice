@@ -43,8 +43,7 @@ const launch = async (params) => {
             password: config["REDIS_PASSWORD"],
             socket: {
                 host: config["REDIS_HOST"],
-                port: config["REDIS_HOST_PORT"],
-                tls: true
+                port: config["REDIS_HOST_PORT"]
             }
         });
 
